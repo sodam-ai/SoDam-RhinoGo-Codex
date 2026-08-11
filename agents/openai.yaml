@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rhino Architectural Modeling"
+  short_description: "Plan, build, and verify architectural models in Rhino"
+  default_prompt: "Use $rhino-architectural-modeling to plan, build, and verify this architectural model in Rhino."
