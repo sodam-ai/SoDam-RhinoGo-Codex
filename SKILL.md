@@ -1,9 +1,9 @@
 ---
-name: rhino-architectural-modeling
+name: sodam-rhinogo
 description: Plan, build, inspect, and regression-test conceptual architectural models in Rhino 7 with live RhinoCommon geometry, independent document and saved-file audits, and parameter-change tests.
 ---
 
-# Rhino Architectural Modeling
+# SoDam-RhinoGo
 
 Build Rhino architectural models from an explicit model contract, then verify the geometry independently from the generation script. Prefer reproducible evidence—saved `.3dm` versions, live document measurements, model metrics, and view captures—over self-reported success.
 

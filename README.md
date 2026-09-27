@@ -1,6 +1,20 @@
 # Rhino 7 rebuild
 
-The **implementation root** is exactly `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam`. The clean original clone is retained only as a reference in `upstream-source/`. The installed Codex skill junction at `C:\Users\PC\.agents\skills\rhino-architectural-modeling` points to this implementation root.
+The **implementation root** is exactly `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo`. The clean original clone is retained only as a reference in `upstream-source/`. The Codex marketplace and bundled plugin are in `.agents/plugins/marketplace.json` and `plugins/sodam-rhinogo/`.
+
+## SoDam-RhinoGo plugin
+
+Install from this local marketplace in Codex Desktop or CLI:
+
+```powershell
+codex plugin marketplace add D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo
+codex plugin add sodam-rhinogo@sodam-rhinogo
+codex plugin list
+```
+
+The Codex card is **SoDam-RhinoGo**. The plugin ID and skill name are `sodam-rhinogo`. Open a new Codex task after installation, then ask: “Use SoDam-RhinoGo to make a Rhino 7 pavilion, save a new .3dm, and report the live and saved-file audits.” The skill bundle includes the Rhino 7 scripts, assets, references, and requirements. It creates its own `.venv` on first use. Keep model outputs under `work/` and use unique names.
+
+This is a local marketplace. Publication to a GitHub marketplace requires a separate repository owned by the user; the original upstream remains a reference and is not a publishing target.
 
 Start with [RHINO7_README.md](RHINO7_README.md) for Rhino 7 live generation, independent audits, parameter tests, and the optional offline route. The historical upstream README below describes its Rhino 8 and MCP workflow; its install commands do not apply to this Rhino 7 implementation.
 

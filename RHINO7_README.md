@@ -1,6 +1,6 @@
 # Rhino 7 implementation
 
-The implementation is directly in `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam`.
+The implementation is directly in `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo`.
 The clean original is retained only as a reference in `upstream-source/` at
 commit `9faa760402a422262ae7f23cf53cd61a7334bf7f`. The working branch is
 `rhino7-rebuild`. Preserve both during future cleanup.
@@ -60,9 +60,9 @@ or construction documentation.
 ## Paths and preservation
 
 - `upstream-source/`: original GitHub clone. No Rhino 7 edits.
-- `.`: editable Rhino 7 project and installed Codex skill target.
+- `.`: editable Rhino 7 source project and local marketplace root.
 - `work/`: generated models and temporary test outputs, ignored by Git.
-- The `rhino-architectural-modeling` skill link points here, never at upstream.
+- The `sodam-rhinogo` plugin contains the installed skill; the old standalone link is a legacy route.
 
 The original Rhino MCP transport is Rhino 8-oriented and has not been verified
 with Rhino 7; use the tested local live launcher for Rhino 7 execution. Back up

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Rhino 7 Architectural Modeling"
+  display_name: "SoDam-RhinoGo"
   short_description: "Build and audit architectural models live in Rhino 7"
-  default_prompt: "Use $rhino-architectural-modeling and the Rhino 7 live launcher to generate a new .3dm, inspect its live audit, and independently audit the saved file."
+  default_prompt: "Use $sodam-rhinogo and the Rhino 7 live launcher to generate a new .3dm, inspect its live audit, and independently audit the saved file."
