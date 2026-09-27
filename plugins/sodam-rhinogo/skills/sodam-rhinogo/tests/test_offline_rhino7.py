@@ -1,3 +1,4 @@
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -5,7 +6,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from generate_rhino7_model import DEFAULTS, build
+from generate_rhino7_model import DEFAULTS, build, validate
 from inspect_rhino7_model import inspect
 
 
@@ -34,9 +35,43 @@ class OfflineRhino7Tests(unittest.TestCase):
         self.assertGreater(reports[1]["bbox"]["max"][0], reports[0]["bbox"]["max"][0])
         self.assertEqual(reports[1]["bbox"]["min"][1:], reports[0]["bbox"]["min"][1:])
 
+    def test_rejects_nonfinite_dimension_values(self):
+        for key, value in (("length_mm", float("nan")), ("width_mm", float("inf")),
+                           ("eave_height_mm", float("-inf")), ("footing_size_mm", True)):
+            with self.subTest(key=key, value=value):
+                with self.assertRaises(ValueError):
+                    validate({**DEFAULTS, key: value})
+
     def test_invalid_parameters_rejected(self):
         with self.assertRaises(ValueError):
             build({**DEFAULTS, "frame_count": 1})
+
+    def test_rejects_excessive_workload_and_coordinates(self):
+        for key, value in (("frame_count", 1000000000),
+                           ("roof_slat_count", 1000000000),
+                           ("length_mm", 1e308)):
+            with self.subTest(key=key):
+                with self.assertRaises(ValueError):
+                    validate({**DEFAULTS, key: value})
+
+    def test_existing_sidecar_reports_are_preserved(self):
+        scripts = Path(__file__).resolve().parents[1] / "scripts"
+        with tempfile.TemporaryDirectory() as tmp:
+            model_path = Path(tmp) / "model.3dm"
+            build_report = model_path.with_suffix(".build.json")
+            build_report.write_text("sentinel-build", encoding="utf-8")
+            result = subprocess.run([sys.executable, str(scripts / "generate_rhino7_model.py"),
+                                     str(model_path)], capture_output=True, text=True, check=False)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(model_path.exists())
+            self.assertEqual(build_report.read_text(encoding="utf-8"), "sentinel-build")
+            self.assertTrue(build(DEFAULTS.copy())[0].Write(str(model_path), 7))
+            audit_report = model_path.with_suffix(".audit.json")
+            audit_report.write_text("sentinel-audit", encoding="utf-8")
+            result = subprocess.run([sys.executable, str(scripts / "inspect_rhino7_model.py"),
+                                     str(model_path)], capture_output=True, text=True, check=False)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(audit_report.read_text(encoding="utf-8"), "sentinel-audit")
 
 
 if __name__ == "__main__":

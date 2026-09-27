@@ -2,11 +2,17 @@
 """Run the same Rhino 7 generator twice in one scratch document."""
 import json
 import os
+import sys
 import scriptcontext as sc
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+assets_dir = os.path.join(root, "assets")
+if assets_dir not in sys.path:
+    sys.path.insert(0, assets_dir)
 generator = os.path.join(root, "assets", "parametric-pavilion-rhino7.py")
-report_path = os.path.join(root, "work", "pavilion-idempotence.json")
+report_path = os.environ.get("RHINO7_IDEMPOTENCE_REPORT") or os.path.join(
+    root, "work", "pavilion-idempotence.json")
+report_path = os.path.abspath(report_path)
 if os.path.exists(report_path):
     raise IOError("Preserving existing report: " + report_path)
 os.environ["RHINO7_OUTPUT_3DM"] = ""
@@ -17,9 +23,9 @@ def snapshot():
     names = sorted(obj.Name for obj in objects)
     return {"count": len(objects), "names": names}
 
-execfile(generator)
+execfile(generator, {"__file__": generator, "__name__": "__main__"})
 first = snapshot()
-execfile(generator)
+execfile(generator, {"__file__": generator, "__name__": "__main__"})
 second = snapshot()
 result = {"first_count": first["count"], "second_count": second["count"],
           "names_equal": first["names"] == second["names"],

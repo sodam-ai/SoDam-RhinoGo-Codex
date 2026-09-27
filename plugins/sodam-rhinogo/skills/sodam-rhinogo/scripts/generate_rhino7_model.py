@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 import rhino3dm as r
@@ -28,6 +29,10 @@ DEFAULTS = {
 }
 
 
+MAX_MODEL_OBJECTS = 2000
+MAX_COORDINATE_MM = 10000000
+
+
 def validate(p: dict) -> None:
     if set(p) != set(DEFAULTS):
         raise ValueError(f"Parameter keys must be exactly {sorted(DEFAULTS)}")
@@ -35,9 +40,17 @@ def validate(p: dict) -> None:
         raise ValueError("frame_count must be an integer >= 2")
     if type(p["roof_slat_count"]) is not int or p["roof_slat_count"] < 2:
         raise ValueError("roof_slat_count must be an integer >= 2")
+    if 5 * p["frame_count"] + p["roof_slat_count"] > MAX_MODEL_OBJECTS:
+        raise ValueError("model exceeds the 2000-object safety limit")
     for key, value in p.items():
-        if key.endswith("_mm") and (not isinstance(value, (int, float)) or value <= 0):
-            raise ValueError(f"{key} must be positive")
+        if key.endswith("_mm"):
+            try:
+                valid = (not isinstance(value, bool) and isinstance(value, (int, float))
+                         and math.isfinite(value) and 0 < value <= MAX_COORDINATE_MM)
+            except (OverflowError, ValueError):
+                valid = False
+            if not valid:
+                raise ValueError(f"{key} must be a finite positive number")
     if p["column_size_mm"] >= p["width_mm"] / 2:
         raise ValueError("Columns leave no usable span")
     if p["roof_slat_width_mm"] >= p["length_mm"] / (p["roof_slat_count"] - 1):
@@ -111,14 +124,15 @@ def main() -> int:
     parser.add_argument("output", type=Path)
     parser.add_argument("--parameters", type=Path)
     args = parser.parse_args()
+    metrics = args.output.with_suffix(".build.json")
+    for path in (args.output, metrics):
+        if path.exists():
+            raise FileExistsError(f"Preserving existing file: {path}")
     p = json.loads(args.parameters.read_text(encoding="utf-8")) if args.parameters else DEFAULTS.copy()
     model, summary = build(p)
-    if args.output.exists():
-        raise FileExistsError(f"Preserving existing file: {args.output}")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     if not model.Write(str(args.output), 7):
         raise RuntimeError("File3dm.Write failed")
-    metrics = args.output.with_suffix(".build.json")
     metrics.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(json.dumps({"model": str(args.output), "build_report": str(metrics), **summary}))
     return 0

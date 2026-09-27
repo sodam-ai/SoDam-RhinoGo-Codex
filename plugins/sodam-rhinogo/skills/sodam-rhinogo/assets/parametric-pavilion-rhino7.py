@@ -9,49 +9,19 @@ import json
 
 import scriptcontext as sc
 import os
+from sodam_rhinogo_parameters import load_parameters
 doc = sc.doc  # document owned by this Rhino script
 
 # ── Parameters ─────────────────────────────────────────────────
-PARAMS = {
-    "length": 12000,          # mm, X axis
-    "width": 8000,            # mm, Y axis
-    "frame_count": 7,         # portal frames including both ends
-    "eave_height": 3000,      # mm, Z of eave
-    "ridge_height": 4500,     # mm, Z of ridge
-    "column_section": (200, 200),   # (wx, wy) mm
-    "beam_section": (200, 300),     # (wx, wy) mm — wy is vertical dim
-    "louver_count_per_side": 10,
-    "louver_angle_deg": 30,
-    "entrance_width": 2400,   # mm clear opening
-    "entrance_offset": 0,     # mm from facade centre along Y
-}
-
-override_path = os.environ.get("RHINO7_PARAMS_JSON", "")
-if override_path:
-    with open(override_path, "r") as params_file:
-        overrides = json.load(params_file)
-    if not isinstance(overrides, dict) or set(overrides) - set(PARAMS):
-        raise ValueError("Parameter JSON has unknown keys or is not an object")
-    PARAMS.update(overrides)
-
+PARAMS = load_parameters(os.environ.get("RHINO7_PARAMS_JSON", ""))
 p = PARAMS
-if not isinstance(p["frame_count"], int) or p["frame_count"] < 2:
-    raise ValueError("frame_count must be an integer >= 2")
-if not isinstance(p["louver_count_per_side"], int) or p["louver_count_per_side"] < 1:
-    raise ValueError("louver_count_per_side must be an integer >= 1")
-for key in ("length", "width", "eave_height", "ridge_height", "entrance_width"):
-    if not isinstance(p[key], (int, float)) or p[key] <= 0:
-        raise ValueError(key + " must be positive")
-for key in ("column_section", "beam_section"):
-    if len(p[key]) != 2 or min(p[key]) <= 0:
-        raise ValueError(key + " must contain two positive dimensions")
-if p["ridge_height"] <= p["eave_height"]:
-    raise ValueError("ridge must be above eaves")
-if abs(p["entrance_offset"]) + p["entrance_width"] / 2.0 >= p["width"] / 2.0:
-    raise ValueError("entrance does not fit facade")
 output_3dm = os.environ.get("RHINO7_OUTPUT_3DM", "")
-if output_3dm and os.path.exists(output_3dm):
-    raise IOError("Preserving existing model: " + output_3dm)
+if output_3dm:
+    outputs = [output_3dm] + [os.path.splitext(output_3dm)[0] + suffix
+                              for suffix in (".build.json", ".audit.json", ".saved-audit.json")]
+    for candidate in outputs:
+        if os.path.exists(candidate):
+            raise IOError("Preserving existing output: " + candidate)
 
 # ── Derived ────────────────────────────────────────────────────
 frame_spacing = p["length"] / (p["frame_count"] - 1)

@@ -1,6 +1,6 @@
 {
   "name": "sodam-rhinogo",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260927110134",
   "description": "Rhino 7 architectural modeling, live generation, independent audits, and parameter tests",
   "author": {
     "name": "SoDam"

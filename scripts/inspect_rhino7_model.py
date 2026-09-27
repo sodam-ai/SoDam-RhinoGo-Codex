@@ -65,8 +65,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("model", type=Path)
     args = parser.parse_args()
-    report = inspect(args.model)
     report_path = args.model.with_suffix(".audit.json")
+    if report_path.exists():
+        raise FileExistsError(f"Preserving existing audit: {report_path}")
+    report = inspect(args.model)
     report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps({"model": str(args.model), "report": str(report_path), **report}))
     return 0 if report["overall_pass"] else 1

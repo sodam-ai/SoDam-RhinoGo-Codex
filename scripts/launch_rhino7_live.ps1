@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory = $true)][string]$OutputFile,
     [string]$ParametersFile,
-    [int]$TimeoutSeconds = 120
+    [ValidateRange(1, 3600)][int]$TimeoutSeconds = 120
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
@@ -12,12 +12,24 @@ if (-not (Test-Path -LiteralPath $script)) { throw "Runner missing: $script" }
 $output = [System.IO.Path]::GetFullPath($OutputFile)
 if ([System.IO.Path]::GetExtension($output).ToLowerInvariant() -ne '.3dm') { throw 'OutputFile must end in .3dm' }
 if (Test-Path -LiteralPath $output) { throw "Preserving existing model: $output" }
+foreach ($suffix in @('.build.json', '.audit.json', '.saved-audit.json')) {
+    $report = [System.IO.Path]::ChangeExtension($output, $suffix)
+    if (Test-Path -LiteralPath $report) { throw "Preserving existing report: $report" }
+}
 if (-not (Test-Path -LiteralPath (Split-Path $output -Parent))) { throw 'Output parent directory must already exist' }
 $params = ''
 if ($ParametersFile) {
     $params = [System.IO.Path]::GetFullPath($ParametersFile)
     if (-not (Test-Path -LiteralPath $params)) { throw "ParametersFile missing: $params" }
 }
+$python = Join-Path $root '.venv\Scripts\python.exe'
+$validator = Join-Path $PSScriptRoot 'validate_live_rhino7_params.py'
+if (-not (Test-Path -LiteralPath $python)) { throw "Python environment missing: $python" }
+if (-not (Test-Path -LiteralPath $validator)) { throw "Parameter validator missing: $validator" }
+$validationArgs = @($validator)
+if ($params) { $validationArgs += @('--parameters', $params) }
+& $python @validationArgs | Out-Null
+if ($LASTEXITCODE -ne 0) { throw 'Rhino 7 parameter validation failed before launch' }
 $oldOutput = $env:RHINO7_OUTPUT_3DM
 $oldParams = $env:RHINO7_PARAMS_JSON
 try {

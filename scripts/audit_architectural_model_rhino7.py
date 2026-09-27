@@ -165,5 +165,7 @@ print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
 output_3dm = os.environ.get("RHINO7_OUTPUT_3DM", "")
 if output_3dm:
     report_path = os.path.splitext(output_3dm)[0] + ".audit.json"
+    if os.path.exists(report_path):
+        raise IOError("Preserving existing audit: " + report_path)
     with open(report_path, "w") as report_file:
         report_file.write(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))

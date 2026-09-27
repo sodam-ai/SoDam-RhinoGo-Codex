@@ -55,7 +55,8 @@ def audit(model_path: Path) -> dict:
             axes.append(b.Min.X)
     axes.sort()
     expected_axes = [params["length"]*i/(n-1) for i in range(n)]
-    near = lambda left, right: abs(left-right) <= 0.01
+    def near(left, right):
+        return abs(left-right) <= 0.01
     checks = {
         "archive_70": r.File3dm.ReadArchiveVersion(str(model_path)) == 70,
         "millimeters": model.Settings.ModelUnitSystem == r.UnitSystem.Millimeters,
