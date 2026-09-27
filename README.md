@@ -1,3 +1,10 @@
+# Rhino 7 rebuild (local working copy)
+
+This checkout is the **Rhino 7 modified work** at `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam\rhino7-work`. The untouched original is stored separately in the sibling `upstream-source` folder. The installed Codex skill at `C:\Users\PC\.agents\skills\rhino-architectural-modeling` points to this working copy.
+
+Start with [RHINO7_README.md](RHINO7_README.md) for the Rhino 7 offline generation, audit, tests, and first run. The upstream README below describes its original Rhino 8 and MCP workflow; its installation commands would install the upstream version, not this Rhino 7 rebuild.
+
+---
 # Rhino Architectural Modeling
 
 A reusable Agent Skill for planning, generating, auditing, and regression-testing conceptual architectural models in Rhino 8.

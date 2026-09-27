@@ -1,11 +1,17 @@
 ---
 name: rhino-architectural-modeling
-description: Plan, generate, inspect, and regression-test conceptual architectural models in Rhino 8 with RhinoCommon and Rhino MCP. Use for parametric pavilions, structural frames, canopies, facade or louver systems, spatial envelopes, deterministic .3dm generation, model QA, and coordinated multi-agent Rhino work. Do not treat it as structural certification, building-code review, fabrication detailing, or a substitute for visual design judgment.
+description: Plan, generate, inspect, and regression-test conceptual architectural models for Rhino 7 using offline rhino3dm archives, with the upstream RhinoCommon/MCP workflow retained for compatible live environments. Use for deterministic .3dm generation, model QA, and parameter-change tests.
 ---
 
 # Rhino Architectural Modeling
 
 Build Rhino architectural models from an explicit model contract, then verify the geometry independently from the generation script. Prefer reproducible evidence—saved `.3dm` versions, live document measurements, model metrics, and view captures—over self-reported success.
+
+## Rhino 7 route
+
+For Rhino 7 on Windows, first read [RHINO7_README.md](RHINO7_README.md). Use `scripts/first_run.ps1` for an offline conceptual pavilion, or `scripts/generate_rhino7_model.py` with a complete parameter JSON for a new variant. Reopen the saved `.3dm` with `scripts/inspect_rhino7_model.py`; compare audit JSONs with the upstream `scripts/compare_model_metrics.py`. The offline route does not require Rhino MCP or a Rhino license. It writes a Rhino 7 archive, not a live Rhino document. Open the result in Rhino 7 separately to inspect its appearance.
+
+The workflow below is the upstream live RhinoCommon/MCP route. Do not run its Rhino 8 example or claim live Rhino 7 compatibility without verifying the connected Rhino version and the exact MCP operations.
 
 ## Choose the workflow
 

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Rhino Architectural Modeling"
-  short_description: "Plan, build, and verify architectural models in Rhino"
-  default_prompt: "Use $rhino-architectural-modeling to plan, build, and verify this architectural model in Rhino."
+  display_name: "Rhino 7 Architectural Modeling"
+  short_description: "Build and verify Rhino 7 compatible architectural 3DM files"
+  default_prompt: "Use $rhino-architectural-modeling to generate a Rhino 7 compatible .3dm and inspect the saved file."

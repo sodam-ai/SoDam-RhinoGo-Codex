@@ -3,3 +3,9 @@ __pycache__/
 *.py[cod]
 .env
 .env.*
+
+.venv/
+work/
+*.3dm
+*.build.json
+*.audit.json
