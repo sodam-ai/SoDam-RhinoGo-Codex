@@ -1,6 +1,6 @@
 # Rhino 7 implementation
 
-The implementation is directly in `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo`.
+The implementation is directly in `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex`.
 The clean original is retained only as a reference in `upstream-source/` at
 commit `9faa760402a422262ae7f23cf53cd61a7334bf7f`. The working branch is
 `rhino7-rebuild`. Preserve both during future cleanup.

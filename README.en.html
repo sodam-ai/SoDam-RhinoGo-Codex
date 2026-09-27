@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="source-sha256" content="742034514a3712b099db2cfb117504e4d905263139a954f6b167314c2ae71206">
-<title>SoDam-RhinoGo — Rhino 7 Modeling Guide</title>
+<meta name="source-sha256" content="8a11dc3453e61eef7c76e11be2235e3505109dd704918506d1c664d8ba08949b">
+<title>SoDam-RhinoGo-Codex — Rhino 7 Modeling Guide</title>
 <style>
 :root{color-scheme:light;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
   line-height:1.6;color:#172235;background:#f4f7fb}
@@ -31,9 +31,9 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;padding
 </head>
 <body>
 <main id=content>
-<h1>SoDam-RhinoGo — Rhino 7 Modeling Guide</h1>
+<h1>SoDam-RhinoGo-Codex — Rhino 7 Modeling Guide</h1>
 <p><strong>English guide · status as of 2026-09-27.</strong> Korean edition: <a href="README.md">Markdown</a> · <a href="README.html">HTML</a>. This guide contains the same information as its <a href="README.en.html">HTML edition</a>.</p>
-<p>SoDam-RhinoGo is a <strong>skill plugin installed from a local Codex marketplace</strong>. It creates an example architectural pavilion in Rhino 7 for Windows and saves a <code>.3dm</code> model and audit reports. It has a full example built inside Rhino and a smaller offline example built without Rhino. It is neither a standalone website nor a Rhino <code>.rhp</code> plugin.</p>
+<p>SoDam-RhinoGo-Codex is the Rhino 7 project and repository name. Its skill plugin is named <strong>SoDam-RhinoGo</strong> and is installed from a local Codex marketplace. It creates an example architectural pavilion in Rhino 7 for Windows and saves a <code>.3dm</code> model and audit reports. It has a full example built inside Rhino and a smaller offline example built without Rhino. It is neither a standalone website nor a Rhino <code>.rhp</code> plugin.</p>
 <blockquote>
 <p><strong>What has been verified:</strong> On this computer, we verified local marketplace registration, plugin installation and enabled state, 14 tests of the installed copy, creation of 67 objects in Rhino 7, and reopening and auditing the saved file. The Codex desktop plugin picker and automatic natural-language invocation, visual quality of the Rhino viewport, the original Rhino MCP connection to Rhino 7, a Grasshopper definition, and public marketplace distribution have not been verified. The commands below cover the features currently implemented.</p>
 </blockquote>
@@ -103,21 +103,21 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;padding
 <li><strong>Windows PC and Rhino 7:</strong> The full example expects <code>C:\Program Files\Rhino 7\System\Rhino.exe</code>. Find the installer under <strong>Legacy Downloads → Rhino 7</strong> on <a href="https://www.rhino3d.com/en/download/">McNeel's official download page</a>, then activate it using your own Rhino license. If installed elsewhere, the current launcher fails before starting. You do not need the Rhino application for the small offline example.</li>
 <li><strong>Python 3.12 (64-bit recommended):</strong> Get a 3.12-series installer from the <a href="https://www.python.org/downloads/windows/">official Python Windows downloads</a>. After installation, check <code>py -3.12 --version</code> in PowerShell. This computer was tested with 3.12.9. Scripts inside Rhino use Rhino 7's IronPython; Python 3.12 is used for installation and saved-file audits.</li>
 <li><strong>Codex desktop or CLI:</strong> Follow the <a href="https://learn.chatgpt.com/docs/app">Codex app guide</a> and <a href="https://learn.chatgpt.com/docs/codex/cli">Codex CLI guide</a> to install and sign in. <code>codex --version</code> must work for the marketplace commands below. You can still run the manual PowerShell commands without Codex.</li>
-<li><strong>This project folder:</strong> The current implementation is at <code>D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo</code>. On another PC, copy the <strong>entire modified project folder</strong> from a safe backup. The private repository is https://github.com/sodam-ai/SoDam-RhinoGo-Codex; only authorized users can download it. There is no public download address. The <a href="https://github.com/leoyang1984/rhino-architectural-modeling">original GitHub repository</a> is a Rhino 8 reference; downloading only that repository does not install this Rhino 7 plugin.</li>
+<li><strong>This project folder:</strong> The current implementation is at <code>D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex</code>. On another PC, copy the <strong>entire modified project folder</strong> from a safe backup. The private repository is https://github.com/sodam-ai/SoDam-RhinoGo-Codex; only authorized users can download it. There is no public download address. The <a href="https://github.com/leoyang1984/rhino-architectural-modeling">original GitHub repository</a> is a Rhino 8 reference; downloading only that repository does not install this Rhino 7 plugin.</li>
 <li><strong>Internet on first installation:</strong> <code>pip</code> needs it to download <code>rhino3dm&gt;=8.35,&lt;9</code>. If it is already installed in this computer's <code>.venv</code>, you do not need to download it again. Rhino and Codex sign-in and license communication follow each product's settings and terms.</li>
 </ol>
 <p><a id="installation"></a></p>
 <h2>3. Obtaining and installing the project</h2>
 <p><strong>Important:</strong> <code>upstream-source/</code> is an unchanged reference clone of the original. The top-level folder is the modified Rhino 7 project. Do not merge the two or remove the top-level folder when cleaning up an old original installation. Save working files under <code>work/</code> with new names.</p>
 <p>Open PowerShell and run the following <strong>one line at a time</strong>. If already installed, check <code>codex plugin list</code> first and skip duplicate installation commands.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 codex plugin marketplace add (Get-Location).Path
 codex plugin add sodam-rhinogo@sodam-rhinogo
 codex plugin list
 </code></pre>
 <p>Confirm that <code>sodam-rhinogo@sodam-rhinogo</code> is installed and enabled. Open a new Codex task and ask, <code>Use SoDam-RhinoGo to build a Rhino 7 pavilion in a new file and report the live and saved audits.</code> <strong>The full one-prompt natural-language flow in the desktop UI has not yet been verified.</strong> The reproducible method is the PowerShell sequence in the next section. Codex stores an installed plugin copy in its cache, separate from the source project folder. After editing the source, reinstall and verify a new plugin version for those edits to reach the installed copy.</p>
 <p>For manual commands, prepare a dedicated Python environment in the project root. Skip the first line if <code>.venv\Scripts\python.exe</code> already exists.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 if (-not (Test-Path '.\.venv\Scripts\python.exe')) { py -3.12 -m venv .venv }
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m pip check
@@ -126,7 +126,7 @@ if (-not (Test-Path '.\.venv\Scripts\python.exe')) { py -3.12 -m venv .venv }
 <p><a id="quick-start"></a></p>
 <h2>4. Five-minute quick start</h2>
 <p>This is the route that <strong>actually generates the full example inside Rhino 7</strong>. If <code>work/</code> is missing, create it only for outputs. <code>Get-Date</code> gives each model a new name so existing models are preserved. Rhino startup and license checks may make this take longer than five minutes.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 if (-not (Test-Path '.\work')) { New-Item -ItemType Directory '.\work' | Out-Null }
 $model = &quot;.\work\pavilion-$(Get-Date -Format yyyyMMdd-HHmmss).3dm&quot;
 .\scripts\launch_rhino7_live.ps1 -OutputFile $model

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="source-sha256" content="f6cda1d520cd1b103a157b7c62aa4b1177737b7284d59aaccc3fb3b54f137321">
-<title>SoDam-RhinoGo — Rhino 7 모델링 안내서</title>
+<meta name="source-sha256" content="e8a5665e2d0009c3e51e2649872cd14c89784ded981bc82210271dbb8770b554">
+<title>SoDam-RhinoGo-Codex — Rhino 7 모델링 안내서</title>
 <style>
 :root{color-scheme:light;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
   line-height:1.6;color:#172235;background:#f4f7fb}
@@ -31,9 +31,9 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;padding
 </head>
 <body>
 <main id=content>
-<h1>SoDam-RhinoGo — Rhino 7 모델링 안내서</h1>
+<h1>SoDam-RhinoGo-Codex — Rhino 7 모델링 안내서</h1>
 <p><strong>한국어 기본 안내서 · 2026-09-27 기준.</strong> 영어판: <a href="README.en.md">Markdown</a> · <a href="README.en.html">HTML</a>. 이 안내서는 <a href="README.html">HTML판</a>과 같은 내용을 담습니다.</p>
-<p>SoDam-RhinoGo는 <strong>Codex의 로컬 마켓플레이스에서 설치하는 스킬 플러그인</strong>입니다. Windows용 Rhino 7에서 예제 건축 파빌리온을 만들고, <code>.3dm</code> 파일과 검사 보고서를 저장합니다. Rhino 안에서 만드는 전체 예제와 Rhino 없이 만드는 작은 오프라인 예제가 있습니다. 독립 실행형 웹사이트나 Rhino 내부의 <code>.rhp</code> 플러그인은 아닙니다.</p>
+<p>SoDam-RhinoGo-Codex는 Rhino 7용 프로젝트·저장소 이름입니다. 이 프로젝트에서 설치하는 스킬 플러그인의 이름은 <strong>SoDam-RhinoGo</strong>이며 Codex 로컬 마켓플레이스에서 설치합니다. Windows용 Rhino 7에서 예제 건축 파빌리온을 만들고, <code>.3dm</code> 파일과 검사 보고서를 저장합니다. Rhino 안에서 만드는 전체 예제와 Rhino 없이 만드는 작은 오프라인 예제가 있습니다. 독립 실행형 웹사이트나 Rhino 내부의 <code>.rhp</code> 플러그인은 아닙니다.</p>
 <blockquote>
 <p><strong>현재 확인 상태:</strong> 이 컴퓨터에서 로컬 마켓플레이스 등록, 플러그인 설치·활성화, 설치된 복사본의 테스트 14개, Rhino 7 전체 예제 67개 객체 생성, 저장 파일 재검사를 확인했습니다. Codex 데스크톱의 플러그인 선택 화면·자동 자연어 호출, Rhino 화면의 시각적 품질, 원본 Rhino MCP의 Rhino 7 연결, Grasshopper 정의 파일, 공개 마켓플레이스 배포는 확인되지 않았습니다. 아래 명령은 현재 구현된 기능에 한정합니다.</p>
 </blockquote>
@@ -103,21 +103,21 @@ summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;padding
 <li><strong>Windows PC와 Rhino 7:</strong> 전체 예제는 <code>C:\Program Files\Rhino 7\System\Rhino.exe</code>를 찾습니다. <a href="https://www.rhino3d.com/en/download/">McNeel 공식 다운로드</a>의 <strong>Legacy Downloads → Rhino 7</strong>에서 설치 파일을 찾고, 본인의 Rhino 사용권으로 활성화하세요. 이 경로가 다르면 현재 실행 스크립트는 시작 전에 오류를 냅니다. 작은 오프라인 예제만 실행할 때는 Rhino 프로그램이 없어도 됩니다.</li>
 <li><strong>Python 3.12(64비트 권장):</strong> <a href="https://www.python.org/downloads/windows/">Python 공식 Windows 다운로드</a>에서 3.12 계열 설치 프로그램을 받으세요. 설치 후 PowerShell에서 <code>py -3.12 --version</code>을 입력해 확인합니다. 이 컴퓨터에서는 3.12.9로 테스트했습니다. Rhino 내부 스크립트는 Rhino 7의 IronPython으로 실행되며, 이 Python 3.12는 설치·저장 파일 검사에 사용합니다.</li>
 <li><strong>Codex 데스크톱 또는 CLI:</strong> <a href="https://learn.chatgpt.com/docs/app">Codex 앱 안내</a>와 <a href="https://learn.chatgpt.com/docs/codex/cli">Codex CLI 안내</a>를 따라 설치·로그인하세요. <code>codex --version</code>이 작동해야 아래 마켓플레이스 명령을 쓸 수 있습니다. Codex 없이도 아래 수동 PowerShell 실행은 가능합니다.</li>
-<li><strong>이 프로젝트 폴더:</strong> 현재 구현본의 위치는 <code>D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo</code>입니다. 새 PC에는 이 <strong>수정본 폴더 전체</strong>를 안전한 백업에서 복사해야 합니다. 비공개 저장소 주소는 https://github.com/sodam-ai/SoDam-RhinoGo-Codex 이며 접근 권한이 있는 사람만 받을 수 있습니다. 공개 다운로드 주소는 없습니다. 원본 <a href="https://github.com/leoyang1984/rhino-architectural-modeling">GitHub 저장소</a>는 Rhino 8 참고본이므로 이것만 내려받아서는 현재 Rhino 7 플러그인이 설치되지 않습니다.</li>
+<li><strong>이 프로젝트 폴더:</strong> 현재 구현본의 위치는 <code>D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex</code>입니다. 새 PC에는 이 <strong>수정본 폴더 전체</strong>를 안전한 백업에서 복사해야 합니다. 비공개 저장소 주소는 https://github.com/sodam-ai/SoDam-RhinoGo-Codex 이며 접근 권한이 있는 사람만 받을 수 있습니다. 공개 다운로드 주소는 없습니다. 원본 <a href="https://github.com/leoyang1984/rhino-architectural-modeling">GitHub 저장소</a>는 Rhino 8 참고본이므로 이것만 내려받아서는 현재 Rhino 7 플러그인이 설치되지 않습니다.</li>
 <li><strong>첫 설치 시 인터넷:</strong> <code>pip</code>가 <code>rhino3dm&gt;=8.35,&lt;9</code>를 다운로드할 때 필요합니다. 이미 이 컴퓨터의 <code>.venv</code>에 설치되어 있으면 다시 내려받지 않아도 됩니다. Rhino 및 Codex의 로그인·사용권 통신은 각 제품의 설정과 약관을 따릅니다.</li>
 </ol>
 <p><a id="installation"></a></p>
 <h2>3. 프로젝트 받기와 설치</h2>
 <p><strong>중요:</strong> <code>upstream-source/</code>는 변경하지 않은 원본 참고용 복제본이고, 최상위 폴더가 Rhino 7 수정본입니다. 둘을 합치거나 원본 정리 명령으로 최상위 폴더를 지우지 마세요. 작업 파일은 <code>work/</code>에 새 이름으로 저장합니다.</p>
 <p>PowerShell을 열고 다음을 <strong>한 줄씩</strong> 실행합니다. 이미 설치했다면 <code>codex plugin list</code>로 먼저 확인하고 중복 설치 명령은 건너뛰세요.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 codex plugin marketplace add (Get-Location).Path
 codex plugin add sodam-rhinogo@sodam-rhinogo
 codex plugin list
 </code></pre>
 <p>목록에서 <code>sodam-rhinogo@sodam-rhinogo</code>가 설치·활성화됐는지 확인합니다. 새 Codex 작업을 열어 <code>SoDam-RhinoGo 스킬로 Rhino 7 파빌리온을 새 파일에 만들고 live/saved 검사 결과를 알려줘</code>라고 요청할 수 있습니다. <strong>자연어 한 번으로 전체 흐름이 데스크톱 화면에서 작동하는지는 아직 검증되지 않았습니다.</strong> 확실히 재현 가능한 방법은 다음 절의 PowerShell 명령입니다. 플러그인의 설치 복사본은 Codex 캐시에 있으며 원본 소스 폴더와 별개입니다. 소스를 고친 뒤에는 플러그인을 새 버전으로 다시 설치·검증해야 수정 내용이 설치본에 반영됩니다.</p>
 <p>수동 명령을 쓰려면 프로젝트 루트에 전용 Python 환경을 준비합니다. 이미 <code>.venv\Scripts\python.exe</code>가 있다면 첫 줄을 건너뛰세요.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 if (-not (Test-Path '.\.venv\Scripts\python.exe')) { py -3.12 -m venv .venv }
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m pip check
@@ -126,7 +126,7 @@ if (-not (Test-Path '.\.venv\Scripts\python.exe')) { py -3.12 -m venv .venv }
 <p><a id="quick-start"></a></p>
 <h2>4. 5분 빠른 시작</h2>
 <p>아래는 <strong>Rhino 7에서 전체 예제를 실제 생성</strong>하는 경로입니다. <code>work/</code>가 없다면 결과물용으로만 만듭니다. <code>Get-Date</code>가 매번 새 이름을 만들어 기존 모델을 보존합니다. Rhino 실행·사용권 확인에 따라 5분 이상 걸릴 수 있습니다.</p>
-<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex'
 if (-not (Test-Path '.\work')) { New-Item -ItemType Directory '.\work' | Out-Null }
 $model = &quot;.\work\pavilion-$(Get-Date -Format yyyyMMdd-HHmmss).3dm&quot;
 .\scripts\launch_rhino7_live.ps1 -OutputFile $model
