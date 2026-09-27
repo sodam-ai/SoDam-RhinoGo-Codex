@@ -10,3 +10,4 @@ upstream-source/
 *.3dm
 *.build.json
 *.audit.json
+CHECKPOINT.md

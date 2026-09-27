@@ -219,7 +219,8 @@ rhino-architectural-modeling/
 ├── assets/                  # Brief, QA, and RhinoCommon example templates
 ├── references/              # Geometry, MCP, model-contract, and role guidance
 ├── scripts/                 # Read-only audit and metric comparison utilities
-└── LICENSE                  # MIT
+├── LICENSE                  # Apache License, Version 2.0 (SoDam port)
+└── LICENSE-MIT              # original upstream MIT notice
 ```
 
 ## Safety notes
@@ -265,4 +266,4 @@ $rhino-architectural-modeling 帮我规划并建立一个参数化入口雨棚�
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+SoDam AI Studio's contributions use [Apache License, Version 2.0](LICENSE); original upstream material retains [MIT](LICENSE-MIT). See [the plugin notice](../../NOTICE.md) for provenance and separate Rhino/dependency terms. Preserve both applicable notices and mark changes when redistributing. Verify customer assets, AI-assisted outputs, and Rhino use rights before commercial delivery; obtain legal or specialist review where needed.

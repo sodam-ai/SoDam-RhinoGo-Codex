@@ -28,7 +28,15 @@ Pass `-ParametersFile path\to\parameters.json` for a parameter-only variation.
 The example is `work/pavilion-variant.parameters.json`. Use
 `scripts/compare_model_metrics.py` on the baseline and variant audits. The
 scratch-document `scripts/test_live_idempotence_rhino7.py` checks same-parameter
-rebuilds.
+rebuilds. Set `RHINO7_IDEMPOTENCE_REPORT` to a new JSON path before running it
+again; the previous report is preserved.
+
+Inputs are checked before Rhino starts. The live model permits at most 2,000
+objects and dimensions up to 10,000,000 mm; frames must have room for their
+sections, the entrance must clear the columns, and the eaves must exceed beam
+depth. Angles are limited to one full rotation. The offline model uses the
+same object and coordinate safety limits. Use a fresh base name: existing
+`.3dm`, `.build.json`, `.audit.json`, and `.saved-audit.json` files are preserved.
 
 ## Optional offline route
 
@@ -68,3 +76,14 @@ The original Rhino MCP transport is Rhino 8-oriented and has not been verified
 with Rhino 7; use the tested local live launcher for Rhino 7 execution. Back up
 the project and original clone off-drive. A Git branch alone does not protect
 the project from folder removal.
+
+## License and external materials
+
+SoDam AI Studio's Rhino 7 and Codex plugin contributions use Apache License,
+Version 2.0 (`LICENSE`; Copyright 2026 SoDam AI Studio). Original upstream
+material retains MIT (`LICENSE-MIT`; Copyright (c) 2026 Rhino Architectural
+Modeling contributors). See `NOTICE.md` for provenance and separate Rhino and
+dependency terms. Carry applicable notices when redistributing; mark changes.
+Commercial code use is allowed under those terms, while Rhino, customer assets,
+and AI-assisted outputs require separate rights checks. No warranty is provided;
+seek legal or specialist review before public release or customer delivery.

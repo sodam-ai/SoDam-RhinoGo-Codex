@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="source-sha256" content="742034514a3712b099db2cfb117504e4d905263139a954f6b167314c2ae71206">
+<title>SoDam-RhinoGo — Rhino 7 Modeling Guide</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  line-height:1.6;color:#172235;background:#f4f7fb}
+*{box-sizing:border-box}body{margin:0;padding:0 1rem 4rem}
+main{max-width:920px;margin:2rem auto;padding:2.5rem;background:#fff;
+  border:1px solid #dce4ee;border-radius:14px;box-shadow:0 8px 30px #14233b0d}
+h1{font-size:2rem;line-height:1.2;margin-top:0}h2{font-size:1.45rem;border-top:1px solid #dce4ee;
+  padding-top:1.5rem;margin-top:2.5rem}h3{font-size:1.1rem;margin-top:1.8rem}
+p,li{max-width:85ch}a{color:#0757a0;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,summary:focus-visible{outline:3px solid #ee9600;outline-offset:3px}
+blockquote{margin:1.3rem 0;padding:.15rem 1rem;border-left:4px solid #1477c9;background:#eff7ff}
+pre{overflow-x:auto;padding:1rem;background:#11233a;color:#f4f8ff;border-radius:8px;
+  white-space:pre;tab-size:2}pre code{color:inherit;background:none;padding:0}
+code{background:#eef2f7;padding:.12rem .28rem;border-radius:4px;overflow-wrap:anywhere}
+table{display:block;overflow-x:auto;border-collapse:collapse;width:100%}
+th,td{border:1px solid #dce4ee;padding:.6rem;text-align:left;vertical-align:top;min-width:9rem}
+th{background:#edf4fc}tr:nth-child(even){background:#f9fbfe}
+details{margin:1rem 0;padding:1rem;border:1px solid #b9d3e8;border-radius:8px;background:#f5faff}
+summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;padding:.35rem}
+@media(max-width:640px){body{padding:0 .5rem 2rem}main{margin:.5rem auto;padding:1rem;
+  border-radius:8px}h1{font-size:1.55rem}h2{font-size:1.25rem}th,td{min-width:8rem}}
+@media print{body{background:#fff}main{border:0;box-shadow:none;margin:0;padding:0}details{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main id=content>
+<h1>SoDam-RhinoGo — Rhino 7 Modeling Guide</h1>
+<p><strong>English guide · status as of 2026-09-27.</strong> Korean edition: <a href="README.md">Markdown</a> · <a href="README.html">HTML</a>. This guide contains the same information as its <a href="README.en.html">HTML edition</a>.</p>
+<p>SoDam-RhinoGo is a <strong>skill plugin installed from a local Codex marketplace</strong>. It creates an example architectural pavilion in Rhino 7 for Windows and saves a <code>.3dm</code> model and audit reports. It has a full example built inside Rhino and a smaller offline example built without Rhino. It is neither a standalone website nor a Rhino <code>.rhp</code> plugin.</p>
+<blockquote>
+<p><strong>What has been verified:</strong> On this computer, we verified local marketplace registration, plugin installation and enabled state, 14 tests of the installed copy, creation of 67 objects in Rhino 7, and reopening and auditing the saved file. The Codex desktop plugin picker and automatic natural-language invocation, visual quality of the Rhino viewport, the original Rhino MCP connection to Rhino 7, a Grasshopper definition, and public marketplace distribution have not been verified. The commands below cover the features currently implemented.</p>
+</blockquote>
+<h2>Contents</h2>
+<ol>
+<li><a href="#terms">Basic terms</a></li>
+<li><a href="#prerequisites">Prerequisites and downloads</a></li>
+<li><a href="#installation">Obtaining and installing the project</a></li>
+<li><a href="#quick-start">Five-minute quick start</a></li>
+<li><a href="#usage">Running, using, and commands</a></li>
+<li><a href="#files">File locations and checking results</a></li>
+<li><a href="#architecture">Workflow and architecture</a></li>
+<li><a href="#security">Security and data flow</a></li>
+<li><a href="#updates">Update summary</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#faq">Frequently asked questions</a></li>
+<li><a href="#license">Copyright, licenses, and commercial use</a></li>
+<li><a href="#evidence">Verification scope and official sources</a></li>
+</ol>
+<p><a id="terms"></a></p>
+<h2>1. Basic terms</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain-language meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rhino 7</td>
+<td>A program for creating 3D architectural or product forms and opening <code>.3dm</code> files. It requires a separate installation and license.</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>An AI tool to request work in words or run commands. You can use its desktop app or CLI (command line).</td>
+</tr>
+<tr>
+<td>Local marketplace</td>
+<td>A plugin catalog stored in this computer's project folder. It has not been published in a public online directory.</td>
+</tr>
+<tr>
+<td>Skill plugin</td>
+<td>A bundle of instructions and scripts read by Codex. It differs from a <code>.rhp</code> plugin installed into Rhino itself.</td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td>A Windows command window. Search for <code>PowerShell</code> in the Start menu to open it.</td>
+</tr>
+<tr>
+<td><code>.3dm</code></td>
+<td>A Rhino model file. This project writes Rhino 7 format (archive version 70).</td>
+</tr>
+<tr>
+<td><code>.venv</code></td>
+<td>A Python environment used only by this project; it does not change other Python installations.</td>
+</tr>
+<tr>
+<td>Audit</td>
+<td>A check of both the model being built and the <strong>file saved to disk</strong>. <code>overall_pass: true</code> in a report means that audit passed.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="prerequisites"></a></p>
+<h2>2. Prerequisites and downloads</h2>
+<ol>
+<li><strong>Windows PC and Rhino 7:</strong> The full example expects <code>C:\Program Files\Rhino 7\System\Rhino.exe</code>. Find the installer under <strong>Legacy Downloads → Rhino 7</strong> on <a href="https://www.rhino3d.com/en/download/">McNeel's official download page</a>, then activate it using your own Rhino license. If installed elsewhere, the current launcher fails before starting. You do not need the Rhino application for the small offline example.</li>
+<li><strong>Python 3.12 (64-bit recommended):</strong> Get a 3.12-series installer from the <a href="https://www.python.org/downloads/windows/">official Python Windows downloads</a>. After installation, check <code>py -3.12 --version</code> in PowerShell. This computer was tested with 3.12.9. Scripts inside Rhino use Rhino 7's IronPython; Python 3.12 is used for installation and saved-file audits.</li>
+<li><strong>Codex desktop or CLI:</strong> Follow the <a href="https://learn.chatgpt.com/docs/app">Codex app guide</a> and <a href="https://learn.chatgpt.com/docs/codex/cli">Codex CLI guide</a> to install and sign in. <code>codex --version</code> must work for the marketplace commands below. You can still run the manual PowerShell commands without Codex.</li>
+<li><strong>This project folder:</strong> The current implementation is at <code>D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo</code>. On another PC, copy the <strong>entire modified project folder</strong> from a safe backup. The private repository is https://github.com/sodam-ai/SoDam-RhinoGo-Codex; only authorized users can download it. There is no public download address. The <a href="https://github.com/leoyang1984/rhino-architectural-modeling">original GitHub repository</a> is a Rhino 8 reference; downloading only that repository does not install this Rhino 7 plugin.</li>
+<li><strong>Internet on first installation:</strong> <code>pip</code> needs it to download <code>rhino3dm&gt;=8.35,&lt;9</code>. If it is already installed in this computer's <code>.venv</code>, you do not need to download it again. Rhino and Codex sign-in and license communication follow each product's settings and terms.</li>
+</ol>
+<p><a id="installation"></a></p>
+<h2>3. Obtaining and installing the project</h2>
+<p><strong>Important:</strong> <code>upstream-source/</code> is an unchanged reference clone of the original. The top-level folder is the modified Rhino 7 project. Do not merge the two or remove the top-level folder when cleaning up an old original installation. Save working files under <code>work/</code> with new names.</p>
+<p>Open PowerShell and run the following <strong>one line at a time</strong>. If already installed, check <code>codex plugin list</code> first and skip duplicate installation commands.</p>
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+codex plugin marketplace add (Get-Location).Path
+codex plugin add sodam-rhinogo@sodam-rhinogo
+codex plugin list
+</code></pre>
+<p>Confirm that <code>sodam-rhinogo@sodam-rhinogo</code> is installed and enabled. Open a new Codex task and ask, <code>Use SoDam-RhinoGo to build a Rhino 7 pavilion in a new file and report the live and saved audits.</code> <strong>The full one-prompt natural-language flow in the desktop UI has not yet been verified.</strong> The reproducible method is the PowerShell sequence in the next section. Codex stores an installed plugin copy in its cache, separate from the source project folder. After editing the source, reinstall and verify a new plugin version for those edits to reach the installed copy.</p>
+<p>For manual commands, prepare a dedicated Python environment in the project root. Skip the first line if <code>.venv\Scripts\python.exe</code> already exists.</p>
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+if (-not (Test-Path '.\.venv\Scripts\python.exe')) { py -3.12 -m venv .venv }
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip check
+</code></pre>
+<p><code>No broken requirements found.</code> means the dependency check passed. To run the <strong>installed plugin copy</strong> directly, its <code>SKILL.md</code> requires a separate <code>.venv</code> under the installed skill folder. Ask Codex to check and create it on first use, or run the same setup commands in that folder. The project-root <code>.venv</code> and installed-copy <code>.venv</code> are different.</p>
+<p><a id="quick-start"></a></p>
+<h2>4. Five-minute quick start</h2>
+<p>This is the route that <strong>actually generates the full example inside Rhino 7</strong>. If <code>work/</code> is missing, create it only for outputs. <code>Get-Date</code> gives each model a new name so existing models are preserved. Rhino startup and license checks may make this take longer than five minutes.</p>
+<pre><code class="language-powershell">Set-Location 'D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo'
+if (-not (Test-Path '.\work')) { New-Item -ItemType Directory '.\work' | Out-Null }
+$model = &quot;.\work\pavilion-$(Get-Date -Format yyyyMMdd-HHmmss).3dm&quot;
+.\scripts\launch_rhino7_live.ps1 -OutputFile $model
+</code></pre>
+<p>On success you should see <code>Passed : True</code>, <code>Objects : 67</code>, and paths to the model and live/saved audit reports. Open <code>work</code> in File Explorer and use <strong>File → Open</strong> in Rhino 7 to inspect the <code>.3dm</code>. Passing an audit does not establish visual quality. Look at the viewport yourself and check dimensions, direction, and missing objects.</p>
+<p><a id="usage"></a></p>
+<h2>5. Running, using, and commands</h2>
+<h3>Full model and audits</h3>
+<p><code>launch_rhino7_live.ps1</code> checks inputs and file names → starts Rhino 7 → builds the full model → audits the Rhino document → saves <code>.3dm</code> → independently audits the saved file. The output parent folder must already exist. Choose a <strong>new name</strong> ending in <code>.3dm</code>. The default timeout is 120 seconds; use <code>-TimeoutSeconds 180</code> to set a value from 1 to 3600 seconds. An existing <code>.3dm</code> or report with the same base name causes an error instead of an overwrite.</p>
+<pre><code class="language-powershell">.\scripts\launch_rhino7_live.ps1 -OutputFile '.\work\pavilion-my-first.3dm' -TimeoutSeconds 180
+</code></pre>
+<h3>Parameter-only variant</h3>
+<p>In Notepad, create a <strong>new file</strong> such as <code>work\my-parameters.json</code> and save the text below. Keep the double quotes and commas as shown. Values you omit use the defaults. Dimensions are in mm; angles are in degrees.</p>
+<pre><code class="language-json">{
+  &quot;length&quot;: 15000,
+  &quot;frame_count&quot;: 9,
+  &quot;ridge_height&quot;: 5000,
+  &quot;louver_count_per_side&quot;: 12,
+  &quot;louver_angle_deg&quot;: 45,
+  &quot;entrance_width&quot;: 3000,
+  &quot;entrance_offset&quot;: 200
+}
+</code></pre>
+<pre><code class="language-powershell">$variant = &quot;.\work\pavilion-variant-$(Get-Date -Format yyyyMMdd-HHmmss).3dm&quot;
+.\scripts\launch_rhino7_live.ps1 -OutputFile $variant -ParametersFile '.\work\my-parameters.json'
+</code></pre>
+<p>Allowed keys and defaults are in <code>assets/sodam_rhinogo_parameters.py</code>. <code>frame_count</code> must be at least 2 and <code>louver_count_per_side</code> at least 1. Numbers must be finite, the angle's absolute value at most 360 degrees, and the total at most 2,000 objects. Dimensions, entrance clearance, and frame spacing are checked too. Invalid JSON or out-of-range values stop before Rhino starts.</p>
+<p>To compare the <strong>live audit JSON</strong> of a baseline and a variant, substitute the real file names. An existing comparison report is not overwritten.</p>
+<pre><code class="language-powershell">.\.venv\Scripts\python.exe .\scripts\compare_model_metrics.py '.\work\BASE.audit.json' '.\work\VARIANT.audit.json' --expect-change object_count --expect-same units --output '.\work\my-comparison.json'
+</code></pre>
+<p>Replace <code>BASE</code> and <code>VARIANT</code> with the actual generated names. The command prints all differences and whether expectations passed. <code>--tolerance</code> accepts only finite numbers at least zero.</p>
+<h3>Small model without Rhino</h3>
+<p>This route uses <code>rhino3dm</code> to create a simpler <strong>41-object</strong> example. It is different from the full 67-object Rhino route. Give it a new output folder.</p>
+<pre><code class="language-powershell">$offline = &quot;.\work\offline-$(Get-Date -Format yyyyMMdd-HHmmss)&quot;
+.\scripts\first_run.ps1 -OutputDir $offline
+</code></pre>
+<h3>Test commands</h3>
+<pre><code class="language-powershell">.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m pip check
+</code></pre>
+<p>There is no separate <code>package.json</code>, web build, or database migration in this project's runtime path.</p>
+<h3>Environment variables, build, and private repository use</h3>
+<p>Ordinary users do not need a <code>.env</code> file or API key. The launcher temporarily sets <code>RHINO7_OUTPUT_3DM</code> (new model path) and <code>RHINO7_PARAMS_JSON</code> (validated input JSON path), then restores their prior values. <code>RHINO7_IDEMPOTENCE_REPORT</code> is a developer path for the repeat-build test report. Do not put secrets or customer material in environment variables, JSON, or <code>work/</code> outputs.</p>
+<p>There is no separate compile, web build, or database migration step. Installing the Python environment and running the tests above prepares the runtime. <strong>Storing code in a private GitHub repository is not publishing a public plugin.</strong> On another PC, a person with access may obtain the private repository, install Rhino 7, Python, and Codex separately, then repeat the local marketplace registration and <code>.venv</code> installation here. Git excludes <code>.venv/</code>, <code>work/</code>, models, and reports; back those up separately. No Release or public distribution package exists yet.</p>
+<p><a id="files"></a></p>
+<h2>6. File locations and checking results</h2>
+<table>
+<thead>
+<tr>
+<th>Location (relative to project root)</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>README.md</code>, <code>README.html</code>, <code>README.en.md</code>, <code>README.en.html</code></td>
+<td>Korean and English Markdown/HTML editions of this guide.</td>
+</tr>
+<tr>
+<td><code>.agents/plugins/marketplace.json</code></td>
+<td>Local marketplace catalog.</td>
+</tr>
+<tr>
+<td><code>plugins/sodam-rhinogo/.codex-plugin/plugin.json</code></td>
+<td>Codex plugin name, version, and display metadata.</td>
+</tr>
+<tr>
+<td><code>plugins/sodam-rhinogo/skills/sodam-rhinogo/</code></td>
+<td>Skill instructions, scripts, and tests included in the installed copy.</td>
+</tr>
+<tr>
+<td><code>RHINO7_README.md</code>, <code>SKILL.md</code></td>
+<td>Developer-oriented Rhino 7 detail and skill operating instructions.</td>
+</tr>
+<tr>
+<td><code>assets/parametric-pavilion-rhino7.py</code>, <code>assets/sodam_rhinogo_parameters.py</code></td>
+<td>Full-model construction, defaults, and input checks.</td>
+</tr>
+<tr>
+<td><code>scripts/launch_rhino7_live.ps1</code>, <code>scripts/run_full_rhino7.py</code></td>
+<td>Full Rhino 7 execution route.</td>
+</tr>
+<tr>
+<td><code>scripts/audit_architectural_model_rhino7.py</code>, <code>scripts/audit_saved_rhino7.py</code></td>
+<td>Separate checks of the open document and saved file.</td>
+</tr>
+<tr>
+<td><code>scripts/first_run.ps1</code>, <code>scripts/generate_rhino7_model.py</code>, <code>scripts/inspect_rhino7_model.py</code></td>
+<td>Small offline model generation and inspection.</td>
+</tr>
+<tr>
+<td><code>scripts/compare_model_metrics.py</code>, <code>tests/</code></td>
+<td>Variant comparison and automated tests.</td>
+</tr>
+<tr>
+<td><code>requirements.txt</code>, <code>.venv/</code></td>
+<td>Python dependency and project environment; <code>.venv/</code> is Git-ignored.</td>
+</tr>
+<tr>
+<td><code>work/</code></td>
+<td>Models and JSON reports; Git-ignored, so back them up separately.</td>
+</tr>
+<tr>
+<td><code>upstream-source/</code></td>
+<td>Unchanged original GitHub reference. <strong>It is not the modified project or its runtime root.</strong></td>
+</tr>
+<tr>
+<td><code>LICENSE</code>, <code>LICENSE-MIT</code>, <code>NOTICE.md</code> and plugin copies</td>
+<td>Apache 2.0 port, upstream MIT, and provenance notices.</td>
+</tr>
+</tbody>
+</table>
+<p>A full run creates four files with the same base name: <code>.3dm</code>, <code>.build.json</code>, <code>.audit.json</code>, and <code>.saved-audit.json</code>. <code>.audit.json</code> checks the open document; <code>.saved-audit.json</code> checks the file on disk. Look for <code>overall_pass: true</code> in both reports. JSON opens in Notepad; <code>.3dm</code> opens in Rhino 7. Keep a model and its reports together because matching names alone cannot prove matching contents.</p>
+<p><a id="architecture"></a></p>
+<h2>7. Workflow and architecture</h2>
+<pre><code class="language-text">User request / PowerShell command
+        ↓
+Codex local marketplace → SoDam-RhinoGo skill
+        ↓
+Parameter and output-path preflight checks
+        ↓
+Rhino 7 + RhinoCommon model generation (or offline rhino3dm generation)
+        ↓
+Independent live audit → new .3dm save → independent saved-file audit
+        ↓
+work/ model + JSON reports → human visual check in Rhino
+</code></pre>
+<p>The default full model is a pavilion measured in mm. Frames, columns, beams, rafters, louvers, and reference objects have names and layers. The Rhino route uses RhinoCommon/IronPython; the offline route uses Python 3.12/rhino3dm. <strong>No Grasshopper <code>.gh</code> definition is included</strong>, and the original Rhino MCP transport has not been verified with this Rhino 7 route. Use only one writer for a Rhino document at a time. The repeated-build check tests whether identical settings keep object counts and names stable.</p>
+<p><a id="security"></a></p>
+<h2>8. Security and data flow</h2>
+<ul>
+<li>Models, parameters, and JSON reports are stored at the selected local paths. The project itself has no sign-in page, web server, database, API-key input, or built-in cloud upload code.</li>
+<li>Codex prompts and file access, Rhino license checks, and Python package downloads follow <strong>the settings and terms of Codex, McNeel, and the package provider</strong> respectively. Do not assume the whole process is always offline.</li>
+<li>The plugin can request local file reads and model writes. Before installation, check that <code>source.path</code> in <code>.agents/plugins/marketplace.json</code> is <code>./plugins/sodam-rhinogo</code>; run it only from a project you trust.</li>
+<li>Do not put passwords, tokens, or private keys in model names, parameter JSON, Codex prompts, reports, or README files. <code>.env</code> and <code>work/</code> are Git-ignored, but check actual files and Git changes again before sharing.</li>
+<li>Files are not automatically encrypted. Back up important models to a separate location. The launcher refuses to overwrite existing models and reports, but that does not replace a backup.</li>
+<li>A previous check scanned 65 source files and 103 work reports for representative secret patterns and found no matches. This is not proof that every possible secret is absent.</li>
+</ul>
+<p><a id="updates"></a></p>
+<h2>9. Update summary</h2>
+<details><summary>Expand the Rhino 7 rebuild changes</summary><ul><li>Preserved the Rhino 8-oriented original under a separate <code>upstream-source/</code> reference and built the Rhino 7 version at the project root.</li><li>Configured a local Codex marketplace and the <code>sodam-rhinogo@sodam-rhinogo</code> skill plugin.</li><li>Added the full 67-object Rhino 7 example, a 41-object offline example, and independent live-document and saved-file audits.</li><li>Added parameter and object-count limits, overwrite prevention, variant comparison, repeat-build checks, and 14 unit tests.</li><li>The currently installed version reads <code>0.1.0+codex.20260927110134</code>. Recheck the installed version and test results after updating source code.</li></ul></details>
+<p><a id="troubleshooting"></a></p>
+<h2>10. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check and remedy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex</code> command not found</td>
+<td>Complete Codex CLI setup and sign-in using the official guide, then open a new PowerShell. Manual model generation works without Codex.</td>
+</tr>
+<tr>
+<td>Plugin not listed</td>
+<td>Confirm the marketplace registration from the project root, then run <code>codex plugin marketplace list</code> and <code>codex plugin list</code>. Reopen the desktop app and check in a new task.</td>
+</tr>
+<tr>
+<td>Installed plugin does not contain your newest edits</td>
+<td>The installed copy has a separate cache. Source edits alone are not proof of an update. Check the version and copy, then follow the plugin update process.</td>
+</tr>
+<tr>
+<td><code>py -3.12</code> not found</td>
+<td>Install Python 3.12 and verify its version in a new PowerShell. Do not change an unrelated Python environment.</td>
+</tr>
+<tr>
+<td><code>Rhino 7 is not installed</code></td>
+<td>Check the exact <code>Rhino.exe</code> path above and your Rhino 7 installation/license. The full launcher does not target a PC with Rhino 8 alone.</td>
+</tr>
+<tr>
+<td><code>Output parent directory must already exist</code></td>
+<td>Create an output directory such as <code>work/</code> first. Do not relocate the implementation to a different folder.</td>
+</tr>
+<tr>
+<td><code>Preserving existing model/report</code></td>
+<td>This is expected overwrite protection. Keep the existing file and choose a new output name.</td>
+</tr>
+<tr>
+<td><code>parameter validation failed</code></td>
+<td>Check JSON syntax, key names, numeric limits, entrance width, column spacing, and total object count. Refer to defaults in <code>assets/sodam_rhinogo_parameters.py</code>.</td>
+</tr>
+<tr>
+<td>Rhino exits or times out</td>
+<td>Open Rhino 7 yourself to check license or error dialogs. Retry with a new output name and, if needed, <code>-TimeoutSeconds 180</code>. Preserve partial files and retry under a new name.</td>
+</tr>
+<tr>
+<td><code>.audit.json</code> passes but <code>.saved-audit.json</code> fails</td>
+<td>The saved-file audit failed. Do not treat the model as final; inspect failed checks and regenerate under a new name.</td>
+</tr>
+<tr>
+<td>Model looks wrong on screen</td>
+<td>Passing an audit does not guarantee visual quality. Inspect perspective, plan, and elevations in Rhino and check dimensions and layers.</td>
+</tr>
+</tbody>
+</table>
+<p><a id="faq"></a></p>
+<h2>11. Frequently asked questions</h2>
+<p><strong>Q. Do I need Rhino 8?</strong></p>
+<p>A. The current full route uses installed <strong>Rhino 7</strong>. Even though the <code>rhino3dm</code> package is version 8.x, we wrote and re-audited <code>.3dm</code> files in Rhino 7 archive format.</p>
+<p><strong>Q. Must I install Grasshopper?</strong></p>
+<p>A. Current scripts contain no Grasshopper <code>.gh</code> definition or execution step. It is not required for the verified route.</p>
+<p><strong>Q. Does installing the Codex plugin add a button inside Rhino?</strong></p>
+<p>A. No. This is a Codex skill plugin, not a Rhino <code>.rhp</code> plugin. A Codex request or PowerShell script starts Rhino.</p>
+<p><strong>Q. Can I run it on a phone?</strong></p>
+<p>A. The current full launcher uses Rhino 7 on Windows. There is no direct mobile execution feature. You can read the HTML guide in a mobile browser.</p>
+<p><strong>Q. Can everything run without internet?</strong></p>
+<p>A. Offline generation may work with dependencies already installed, but first package installation and Codex/Rhino sign-in or license traffic are separate. Fully offline operation has not been verified.</p>
+<p><strong>Q. Does updating the original GitHub repository update this port?</strong></p>
+<p>A. No. The original under <code>upstream-source/</code> is only a reference. The port and installed cache are managed separately.</p>
+<p><strong>Q. Is a passing report enough to build the pavilion?</strong></p>
+<p>A. No. The audit checks conceptual model objects, geometry, and saving. Structural safety, codes, buildability, and fabrication require separate review by qualified professionals.</p>
+<p><a id="license"></a></p>
+<h2>12. Copyright, licenses, and commercial use</h2>
+<ol>
+<li><strong>Licenses and copyright:</strong> SoDam AI Studio's contributions to this Rhino 7 port and SoDam-RhinoGo plugin are offered under the <strong>Apache License, Version 2.0 (SPDX: Apache-2.0)</strong>. The root and plugin <code>LICENSE</code> files contain the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">official Apache 2.0 text</a> and <code>Copyright 2026 SoDam AI Studio</code>. Material derived from <code>leoyang1984/rhino-architectural-modeling</code> retains <code>Copyright (c) 2026 Rhino Architectural Modeling contributors</code> and the <strong>MIT License</strong> in the separate <a href="LICENSE-MIT"><code>LICENSE-MIT</code></a>. Applying Apache to the port does not replace the upstream MIT rights or establish ownership of every contribution.</li>
+<li><strong>Use, modification, sale, and delivery:</strong> Subject to the applicable conditions of both licenses, you may use, modify, copy, fork, redistribute, and use the code in commercial services, teaching, company work, and customer deliveries. When distributing copies, include the Apache 2.0 text, upstream MIT copyright and permission notice, and applicable <code>NOTICE.md</code> notices; mark modifications. Apache 2.0 also has copyright and patent conditions, so read its full text. This guidance does not grant rights to Rhino, customer materials, or generated outputs.</li>
+<li><strong>Do not:</strong> Do not remove the upstream MIT notice or applicable Apache/NOTICE notices. Do not claim this repository's licenses permit redistribution of Rhino executables, license keys, McNeel documentation, third-party marks or images, or customer materials. SoDam-RhinoGo is not an official McNeel product or endorsement. Do not put private data, personal information, or API keys in public examples.</li>
+<li><strong>Separate software and dependencies:</strong> Installing and using Rhino 7, concurrent sessions, and license type follow the <a href="https://www.rhino3d.com/7/eula/">Rhino 7 EULA</a> and your own agreement. This project uses public APIs and grants no right to decompile proprietary Rhino binaries. The only direct <code>requirements.txt</code> dependency is <code>rhino3dm&gt;=8.35,&lt;9</code>; installed <code>8.35.0</code> metadata and included license on this PC say MIT. Recheck notices for the exact version if bundling package binaries. Codex accounts, external APIs/SDKs, service plans, and terms are separate.</li>
+<li><strong>New materials and AI outputs:</strong> No bundled image, icon, font, video, audio, or third-party 3D model was found in the reviewed source. For any later model, texture, template, prompt, screenshot, or AI-generated code/document/image/model, check origin, copyright, commercial permission, attribution, and possible similarity to protected works before final use. Generated <code>work/</code> files and customer inputs were outside this source review.</li>
+<li><strong>Before publication or delivery:</strong> The upstream MIT notice and user-specified Apache 2.0 designation were verified in files, but those files alone cannot establish rights of every contributor to the Rhino 7 code or rights under customer contracts, input assets, and generated outputs. This GitHub upload targets a <strong>private repository</strong>. Before public release, sale, or customer delivery, verify the chain of rights and Rhino license type and resolve matters needing <strong>legal or specialist review</strong>. A passing model audit is not a building permit, structural safety finding, or construction approval.</li>
+<li><strong>Warranty and liability:</strong> The disclaimers and liability limits in Apache 2.0 and upstream MIT each apply to their respective material. <strong>This is general reference information, not a legally binding conclusion; you are responsible for use and should consult a lawyer.</strong></li>
+</ol>
+<p><a id="evidence"></a></p>
+<h2>13. Verification scope and official sources</h2>
+<ul>
+<li>Verified on this computer: local plugin installation and enabled state, 14 tests in the installed copy, Python dependency check, 67-object full Rhino 7 build and saved-file audit, 41-object offline build written in Rhino 7 format, and rejection of an existing output path.</li>
+<li>Not yet verified: Codex desktop picker and full natural-language invocation, visual Rhino viewport result, original Rhino MCP connection to Rhino 7, Grasshopper, public release, or installation on another PC. Distinguish an installed state from actual execution.</li>
+<li>Official references: <a href="https://developers.openai.com/plugins/build/plugins">Codex plugin packaging</a>, <a href="https://www.rhino3d.com/en/download/">Rhino downloads</a>, <a href="https://www.rhino3d.com/7/eula/">Rhino 7 EULA</a>, <a href="https://www.python.org/downloads/windows/">Python Windows downloads</a>, and the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>, and the <a href="https://spdx.org/licenses/MIT.html">upstream MIT license</a>. This guide describes files and verification as of 2026-09-27. Recheck official installation and legal terms when installing or distributing because they can change.</li>
+</ul>
+</main>
+</body>
+</html>
