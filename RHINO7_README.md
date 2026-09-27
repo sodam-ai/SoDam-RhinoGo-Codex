@@ -1,12 +1,36 @@
-# Rhino 7 adaptation
+# Rhino 7 implementation
 
-This directory is the independent Rhino 7 work copy of
-`leoyang1984/rhino-architectural-modeling` at commit `9faa760402a422262ae7f23cf53cd61a7334bf7f`.
-The upstream source is stored beside it in `../upstream-source`; this working
-copy uses branch `rhino7-rebuild` and a local `upstream-local` remote. Do not
-delete this folder when cleaning the upstream source.
+The implementation is directly in `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam`.
+The clean original is retained only as a reference in `upstream-source/` at
+commit `9faa760402a422262ae7f23cf53cd61a7334bf7f`. The working branch is
+`rhino7-rebuild`. Preserve both during future cleanup.
 
-## What works
+## Live Rhino 7 workflow
+
+`assets/parametric-pavilion-rhino7.py` ports the full upstream pavilion geometry,
+semantic names, layer hierarchy, and parameters to Rhino 7 IronPython.
+`scripts/run_full_rhino7.py` generates and saves a Rhino 7 `.3dm`, then runs an
+independent live-document audit. `scripts/launch_rhino7_live.ps1` opens Rhino 7,
+waits for that audit, and independently reopens the saved archive for another audit.
+
+From this exact root in PowerShell:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\scripts\launch_rhino7_live.ps1 -OutputFile .\work\pavilion-new-r7.3dm
+```
+
+The output parent directory must exist. Use a new output name for every version;
+the launcher refuses to overwrite an existing model. It writes `.build.json`,
+`.audit.json`, and `.saved-audit.json` beside the model.
+
+Pass `-ParametersFile path\to\parameters.json` for a parameter-only variation.
+The example is `work/pavilion-variant.parameters.json`. Use
+`scripts/compare_model_metrics.py` on the baseline and variant audits. The
+scratch-document `scripts/test_live_idempotence_rhino7.py` checks same-parameter
+rebuilds.
+
+## Optional offline route
 
 - `scripts/generate_rhino7_model.py` builds a parametric conceptual pavilion
   offline with `rhino3dm` and writes a Rhino 7 archive (`ReadArchiveVersion=70`).
@@ -14,12 +38,11 @@ delete this folder when cleaning the upstream source.
   counts, semantic names and layers, valid closed solids, units, and envelope.
 - The original `scripts/compare_model_metrics.py` can compare the audit JSONs
   from baseline and changed models.
-- The original RhinoCommon and MCP guidance remains available for a separately
-  configured live Rhino environment. It has not been ported to Rhino 7 here.
+- This is a smaller quick model. Use the live route above for full geometry.
 
-## First use (PowerShell)
+## Offline first use (PowerShell)
 
-Run these commands from this work copy:
+Run these commands from this project root:
 
 ```powershell
 py -3.12 -m venv .venv
@@ -36,10 +59,12 @@ or construction documentation.
 
 ## Paths and preservation
 
-- `../upstream-source`: original GitHub clone. No Rhino 7 edits.
+- `upstream-source/`: original GitHub clone. No Rhino 7 edits.
 - `.`: editable Rhino 7 project and installed Codex skill target.
 - `work/`: generated models and temporary test outputs, ignored by Git.
 - The `rhino-architectural-modeling` skill link points here, never at upstream.
 
-Back up both source and work copy independently. A Git branch alone does not
-protect uncommitted files from folder removal.
+The original Rhino MCP transport is Rhino 8-oriented and has not been verified
+with Rhino 7; use the tested local live launcher for Rhino 7 execution. Back up
+the project and original clone off-drive. A Git branch alone does not protect
+the project from folder removal.

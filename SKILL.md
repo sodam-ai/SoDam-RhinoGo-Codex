@@ -1,6 +1,6 @@
 ---
 name: rhino-architectural-modeling
-description: Plan, generate, inspect, and regression-test conceptual architectural models for Rhino 7 using offline rhino3dm archives, with the upstream RhinoCommon/MCP workflow retained for compatible live environments. Use for deterministic .3dm generation, model QA, and parameter-change tests.
+description: Plan, build, inspect, and regression-test conceptual architectural models in Rhino 7 with live RhinoCommon geometry, independent document and saved-file audits, and parameter-change tests.
 ---
 
 # Rhino Architectural Modeling
@@ -9,9 +9,9 @@ Build Rhino architectural models from an explicit model contract, then verify th
 
 ## Rhino 7 route
 
-For Rhino 7 on Windows, first read [RHINO7_README.md](RHINO7_README.md). Use `scripts/first_run.ps1` for an offline conceptual pavilion, or `scripts/generate_rhino7_model.py` with a complete parameter JSON for a new variant. Reopen the saved `.3dm` with `scripts/inspect_rhino7_model.py`; compare audit JSONs with the upstream `scripts/compare_model_metrics.py`. The offline route does not require Rhino MCP or a Rhino license. It writes a Rhino 7 archive, not a live Rhino document. Open the result in Rhino 7 separately to inspect its appearance.
+For Rhino 7 on Windows, first read [RHINO7_README.md](RHINO7_README.md). Run `scripts/launch_rhino7_live.ps1 -OutputFile .\work\unique-name.3dm` from the project root to build the full pavilion in Rhino 7, audit its live document, save a Rhino 7 archive, and audit the reopened archive. Use `-ParametersFile` for a parameter-only variation; compare audit JSONs with `scripts/compare_model_metrics.py`. Preserve every known-good model under a unique name. The smaller `scripts/first_run.ps1` model is an optional offline route.
 
-The workflow below is the upstream live RhinoCommon/MCP route. Do not run its Rhino 8 example or claim live Rhino 7 compatibility without verifying the connected Rhino version and the exact MCP operations.
+The workflow below is the historical upstream RhinoCommon/MCP route. Its injected-document examples target the original environment; use `scriptcontext.doc` and the Rhino 7 scripts above for local Rhino 7 execution. The original Rhino MCP transport has not been verified with Rhino 7.
 
 ## Choose the workflow
 

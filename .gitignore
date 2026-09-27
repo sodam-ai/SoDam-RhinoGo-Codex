@@ -6,6 +6,7 @@ __pycache__/
 
 .venv/
 work/
+upstream-source/
 *.3dm
 *.build.json
 *.audit.json

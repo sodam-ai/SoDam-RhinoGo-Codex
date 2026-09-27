@@ -1,4 +1,4 @@
 interface:
   display_name: "Rhino 7 Architectural Modeling"
-  short_description: "Build and verify Rhino 7 compatible architectural 3DM files"
-  default_prompt: "Use $rhino-architectural-modeling to generate a Rhino 7 compatible .3dm and inspect the saved file."
+  short_description: "Build and audit architectural models live in Rhino 7"
+  default_prompt: "Use $rhino-architectural-modeling and the Rhino 7 live launcher to generate a new .3dm, inspect its live audit, and independently audit the saved file."
