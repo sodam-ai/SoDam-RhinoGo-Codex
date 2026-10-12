@@ -1,11 +1,17 @@
 ---
-name: rhino-architectural-modeling
-description: Plan, generate, inspect, and regression-test conceptual architectural models in Rhino 8 with RhinoCommon and Rhino MCP. Use for parametric pavilions, structural frames, canopies, facade or louver systems, spatial envelopes, deterministic .3dm generation, model QA, and coordinated multi-agent Rhino work. Do not treat it as structural certification, building-code review, fabrication detailing, or a substitute for visual design judgment.
+name: sodam-rhinogo
+description: Plan, build, inspect, and regression-test conceptual architectural models in Rhino 7 with live RhinoCommon geometry, independent document and saved-file audits, and parameter-change tests.
 ---
 
-# Rhino Architectural Modeling
+# SoDam-RhinoGo
 
 Build Rhino architectural models from an explicit model contract, then verify the geometry independently from the generation script. Prefer reproducible evidence—saved `.3dm` versions, live document measurements, model metrics, and view captures—over self-reported success.
+
+## Rhino 7 route
+
+For Rhino 7 on Windows, first read [RHINO7_README.md](RHINO7_README.md). Run `scripts/launch_rhino7_live.ps1 -OutputFile .\work\unique-name.3dm` from the project root to build the full pavilion in Rhino 7, audit its live document, save a Rhino 7 archive, and audit the reopened archive. Use `-ParametersFile` for a parameter-only variation; compare audit JSONs with `scripts/compare_model_metrics.py`. Preserve every known-good model under a unique name. The smaller `scripts/first_run.ps1` model is an optional offline route.
+
+The workflow below is the historical upstream RhinoCommon/MCP route. Its injected-document examples target the original environment; use `scriptcontext.doc` and the Rhino 7 scripts above for local Rhino 7 execution. The original Rhino MCP transport has not been verified with Rhino 7.
 
 ## Choose the workflow
 

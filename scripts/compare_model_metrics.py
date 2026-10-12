@@ -18,6 +18,16 @@ from typing import Any
 MISSING = object()
 
 
+def nonnegative_finite_float(value: str) -> float:
+    try:
+        number = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("tolerance must be a finite, non-negative number") from exc
+    if not math.isfinite(number) or number < 0:
+        raise argparse.ArgumentTypeError("tolerance must be a finite, non-negative number")
+    return number
+
+
 def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
@@ -104,13 +114,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("changed", type=Path)
     parser.add_argument("--expect-change", action="append", default=[], metavar="PATH")
     parser.add_argument("--expect-same", action="append", default=[], metavar="PATH")
-    parser.add_argument("--tolerance", type=float, default=1e-9)
+    parser.add_argument("--tolerance", type=nonnegative_finite_float, default=1e-9)
     parser.add_argument("--output", type=Path, help="also write the JSON report to this path")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.output and args.output.exists():
+        print("Preserving existing report: {}".format(args.output), file=sys.stderr)
+        return 2
     baseline = load_json(args.baseline)
     changed = load_json(args.changed)
     diffs = walk_diff(baseline, changed, "", args.tolerance)
@@ -132,7 +145,12 @@ def main() -> int:
     rendered = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)
     if args.output:
-        args.output.write_text(rendered + "\n", encoding="utf-8")
+        try:
+            with args.output.open("x", encoding="utf-8") as handle:
+                handle.write(rendered + "\n")
+        except FileExistsError:
+            print("Preserving existing report: {}".format(args.output), file=sys.stderr)
+            return 2
     return 0 if report["expectations_pass"] else 1
 
 

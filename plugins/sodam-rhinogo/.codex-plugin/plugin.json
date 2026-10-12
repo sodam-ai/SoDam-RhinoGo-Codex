@@ -1,0 +1,22 @@
+{
+  "name": "sodam-rhinogo",
+  "version": "0.1.0+codex.20260927110134",
+  "description": "Rhino 7 architectural modeling, live generation, independent audits, and parameter tests",
+  "author": {
+    "name": "SoDam"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "SoDam-RhinoGo",
+    "shortDescription": "Build and inspect architectural .3dm models in Rhino 7",
+    "longDescription": "Rhino 7 modeling skill with bundled RhinoCommon scripts, model audits, and offline checks.",
+    "developerName": "SoDam",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use SoDam-RhinoGo to create and audit a Rhino 7 architectural .3dm model."
+    ]
+  }
+}

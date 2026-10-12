@@ -3,3 +3,12 @@ __pycache__/
 *.py[cod]
 .env
 .env.*
+
+.venv/
+work/
+upstream-source/
+*.3dm
+*.build.json
+*.audit.json
+CHECKPOINT.md
+.omc/

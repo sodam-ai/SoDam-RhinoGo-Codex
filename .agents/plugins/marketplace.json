@@ -1,0 +1,20 @@
+{
+  "name": "sodam-rhinogo",
+  "interface": {
+    "displayName": "SoDam-RhinoGo"
+  },
+  "plugins": [
+    {
+      "name": "sodam-rhinogo",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sodam-rhinogo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
