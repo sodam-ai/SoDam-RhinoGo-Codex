@@ -42,13 +42,23 @@ SoDam-RhinoGo-Codex는 Rhino 7용 프로젝트·저장소 이름입니다. 이 �
 1. **Windows PC와 Rhino 7:** 전체 예제는 `C:\Program Files\Rhino 7\System\Rhino.exe`를 찾습니다. [McNeel 공식 다운로드](https://www.rhino3d.com/en/download/)의 **Legacy Downloads → Rhino 7**에서 설치 파일을 찾고, 본인의 Rhino 사용권으로 활성화하세요. 이 경로가 다르면 현재 실행 스크립트는 시작 전에 오류를 냅니다. 작은 오프라인 예제만 실행할 때는 Rhino 프로그램이 없어도 됩니다.
 2. **Python 3.12(64비트 권장):** [Python 공식 Windows 다운로드](https://www.python.org/downloads/windows/)에서 3.12 계열 설치 프로그램을 받으세요. 설치 후 PowerShell에서 `py -3.12 --version`을 입력해 확인합니다. 이 컴퓨터에서는 3.12.9로 테스트했습니다. Rhino 내부 스크립트는 Rhino 7의 IronPython으로 실행되며, 이 Python 3.12는 설치·저장 파일 검사에 사용합니다.
 3. **Codex 데스크톱 또는 CLI:** [Codex 앱 안내](https://learn.chatgpt.com/docs/app)와 [Codex CLI 안내](https://learn.chatgpt.com/docs/codex/cli)를 따라 설치·로그인하세요. `codex --version`이 작동해야 아래 마켓플레이스 명령을 쓸 수 있습니다. Codex 없이도 아래 수동 PowerShell 실행은 가능합니다.
-4. **이 프로젝트 폴더:** 현재 구현본의 위치는 `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex`입니다. 새 PC에는 이 **수정본 폴더 전체**를 안전한 백업에서 복사해야 합니다. 비공개 저장소 주소는 https://github.com/sodam-ai/SoDam-RhinoGo-Codex 이며 접근 권한이 있는 사람만 받을 수 있습니다. 공개 다운로드 주소는 없습니다. 원본 [GitHub 저장소](https://github.com/leoyang1984/rhino-architectural-modeling)는 Rhino 8 참고본이므로 이것만 내려받아서는 현재 Rhino 7 플러그인이 설치되지 않습니다.
+4. **이 프로젝트 폴더:** 현재 구현본의 위치는 `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex`입니다. 새 PC에서는 공개 저장소 https://github.com/sodam-ai/SoDam-RhinoGo-Codex 에서 **수정본 전체**를 받습니다. 방법은 둘 중 하나입니다. (가) [Git for Windows](https://git-scm.com/download/win)를 설치하고 다음 절의 `git clone`을 실행합니다. (나) Git 없이 GitHub 화면의 **Code → Download ZIP**으로 받아 압축을 풉니다. 별도의 Release나 설치 파일은 아직 없습니다. 원본 [GitHub 저장소](https://github.com/leoyang1984/rhino-architectural-modeling)는 Rhino 8 참고본이므로 이것만 내려받아서는 현재 Rhino 7 플러그인이 설치되지 않습니다.
 5. **첫 설치 시 인터넷:** `pip`가 `rhino3dm>=8.35,<9`를 다운로드할 때 필요합니다. 이미 이 컴퓨터의 `.venv`에 설치되어 있으면 다시 내려받지 않아도 됩니다. Rhino 및 Codex의 로그인·사용권 통신은 각 제품의 설정과 약관을 따릅니다.
 
 <a id="installation"></a>
 ## 3. 프로젝트 받기와 설치
 
-**중요:** `upstream-source/`는 변경하지 않은 원본 참고용 복제본이고, 최상위 폴더가 Rhino 7 수정본입니다. 둘을 합치거나 원본 정리 명령으로 최상위 폴더를 지우지 마세요. 작업 파일은 `work/`에 새 이름으로 저장합니다.
+**중요:** `upstream-source/`는 변경하지 않은 원본 참고용 복제본이고, 최상위 폴더가 Rhino 7 수정본입니다. 둘을 합치거나 원본 정리 명령으로 최상위 폴더를 지우지 마세요. 작업 파일은 `work/`에 새 이름으로 저장합니다. 공개 저장소에는 `upstream-source/`가 포함되지 않습니다(Git 제외). 원본은 위 링크에서 따로 볼 수 있습니다.
+
+**프로젝트 받기(새 PC):** PowerShell에서 원하는 폴더로 이동해 받습니다. ZIP으로 받았다면 이 단계는 건너뛰고 압축을 푼 폴더로 이동하세요.
+
+```powershell
+Set-Location 'D:\AI_Dev_Work'
+git clone https://github.com/sodam-ai/SoDam-RhinoGo-Codex.git
+Set-Location '.\SoDam-RhinoGo-Codex'
+```
+
+이 안내서의 나머지 `Set-Location` 예시는 이 컴퓨터의 경로입니다. **다른 PC에서는 받은 폴더 경로로 바꿔서** 실행하세요.
 
 PowerShell을 열고 다음을 **한 줄씩** 실행합니다. 이미 설치했다면 `codex plugin list`로 먼저 확인하고 중복 설치 명령은 건너뛰세요.
 
@@ -146,11 +156,11 @@ $offline = ".\work\offline-$(Get-Date -Format yyyyMMdd-HHmmss)"
 
 별도 `package.json`·웹 빌드·DB 마이그레이션은 이 프로젝트의 실행 경로에 없습니다.
 
-### 환경 변수·빌드·비공개 저장소 이용
+### 환경 변수·빌드·저장소 이용
 
 일반 사용자는 `.env`나 API 키를 만들 필요가 없습니다. 실행기는 내부적으로 `RHINO7_OUTPUT_3DM`(새 모델 경로)과 `RHINO7_PARAMS_JSON`(검증된 입력 JSON 경로)을 실행 중에만 설정하고 이전 값을 복원합니다. `RHINO7_IDEMPOTENCE_REPORT`는 개발자의 반복 실행 검사 보고서 경로입니다. 비밀키나 고객 자료를 환경 변수·JSON·`work/` 결과물에 넣지 마세요.
 
-이 프로젝트에는 별도의 컴파일·웹 빌드·DB 이전 단계가 없습니다. 위의 Python 환경 설치와 테스트가 실행 전 준비입니다. **비공개 GitHub에 코드를 보관하는 일은 공개 플러그인 배포가 아닙니다.** 다른 PC에서는 저장소 접근 권한을 가진 사람이 비공개 저장소를 받은 뒤 Rhino 7·Python·Codex를 따로 설치하고, 이 안내의 마켓플레이스 등록과 `.venv` 설치를 다시 실행합니다. `.venv/`, `work/`, 모델·보고서는 Git에서 제외되므로 별도 백업이 필요합니다. Release와 공개 배포 패키지는 아직 없습니다.
+이 프로젝트에는 별도의 컴파일·웹 빌드·DB 이전 단계가 없습니다. 위의 Python 환경 설치와 테스트가 실행 전 준비입니다. **GitHub 공개 저장소에 코드를 올리는 일은 Codex 공식 마켓플레이스 배포와 다릅니다.** 다른 PC에서는 공개 저장소를 받은 뒤 Rhino 7·Python·Codex를 따로 설치하고, 이 안내의 마켓플레이스 등록과 `.venv` 설치를 다시 실행합니다. `.venv/`, `work/`, 모델·보고서는 Git에서 제외되므로 별도 백업이 필요합니다. Release와 공개 배포 패키지는 아직 없습니다.
 
 <a id="files"></a>
 ## 6. 파일 위치와 결과 확인
@@ -200,13 +210,14 @@ work/ 모델 + JSON 보고서 → 사람이 Rhino 화면에서 최종 확인
 - Codex에 입력한 대화와 파일 접근, Rhino 사용권 확인, Python 패키지 다운로드는 각각 **Codex·McNeel·Python 패키지 공급 경로의 설정**을 따릅니다. 따라서 전체 과정이 항상 오프라인이라고 가정하지 마세요.
 - 플러그인은 로컬 파일 읽기·모델 쓰기를 요청할 수 있습니다. 설치 전에 `.agents/plugins/marketplace.json`의 `source.path`가 `./plugins/sodam-rhinogo`인지 확인하고, 신뢰하는 프로젝트에서만 실행하세요.
 - 비밀번호·토큰·개인 키를 모델 이름, 파라미터 JSON, Codex 요청, 보고서, README에 넣지 마세요. `.env`와 `work/`는 Git에서 제외되지만, 공유 전에 직접 파일·Git 변경 목록을 다시 확인해야 합니다.
+- **공개 저장소 주의:** 이 저장소는 누구나 볼 수 있고 복제·캐시될 수 있습니다. `git add` 전에 `git status`와 `git diff --staged`로 `.env`, 모델(`.3dm`), 보고서, 개인 경로, 고객 자료가 없는지 확인하세요. 비밀값이 한 번이라도 올라갔다면 삭제 커밋만으로 지워지지 않으므로 해당 키를 즉시 폐기·재발급하세요.
 - 파일은 자동 암호화되지 않습니다. 중요 모델은 별도 위치에 복사해 백업하세요. 기존 모델·보고서가 있으면 실행기가 덮어쓰기를 거부하지만, 백업을 대신하지는 않습니다.
 - 이전 점검에서는 소스 65개와 작업 보고서 103개의 대표적 민감정보 패턴을 검사해 일치 항목이 없었습니다. 이는 모든 비밀정보의 부재를 증명하는 검사가 아닙니다.
 
 <a id="updates"></a>
 ## 9. 업데이트 내용
 
-<details><summary>현재 Rhino 7 재구축에서 추가·변경된 내용 펼치기</summary><ul><li>Rhino 8 중심 원본을 별도 <code>upstream-source/</code>에 보존하고, 최상위 폴더에 Rhino 7 수정본을 구축했습니다.</li><li>로컬 Codex 마켓플레이스와 <code>sodam-rhinogo@sodam-rhinogo</code> 스킬 플러그인을 구성했습니다.</li><li>Rhino 7의 전체 67객체 예제, 41객체 오프라인 예제, 열린 문서와 저장 파일의 독립 검사를 추가했습니다.</li><li>파라미터·객체 수 제한, 기존 파일 덮어쓰기 방지, 변형 비교, 반복 실행 검사, 단위 테스트 14개를 추가했습니다.</li><li>현재 설치본의 버전 표시는 <code>0.1.0+codex.20260927110134</code>입니다. 새 코드로 갱신하면 설치본 버전·검증 결과를 다시 확인해야 합니다.</li></ul></details>
+<details><summary>현재 Rhino 7 재구축에서 추가·변경된 내용 펼치기</summary><ul><li>Rhino 8 중심 원본을 별도 <code>upstream-source/</code>에 보존하고, 최상위 폴더에 Rhino 7 수정본을 구축했습니다.</li><li>로컬 Codex 마켓플레이스와 <code>sodam-rhinogo@sodam-rhinogo</code> 스킬 플러그인을 구성했습니다.</li><li>Rhino 7의 전체 67객체 예제, 41객체 오프라인 예제, 열린 문서와 저장 파일의 독립 검사를 추가했습니다.</li><li>파라미터·객체 수 제한, 기존 파일 덮어쓰기 방지, 변형 비교, 반복 실행 검사, 단위 테스트 14개를 추가했습니다.</li><li>GitHub 공개 저장소 게시를 위해 설치·받기 안내(<code>git clone</code>, ZIP 내려받기)와 공개 저장소 보안 주의를 추가했습니다.</li><li>현재 설치본의 버전 표시는 <code>0.1.0+codex.20260927110134</code>입니다. 새 코드로 갱신하면 설치본 버전·검증 결과를 다시 확인해야 합니다.</li></ul></details>
 
 <a id="troubleshooting"></a>
 ## 10. 문제 해결
@@ -264,7 +275,7 @@ A. 아니요. 이 검사는 개념 모델의 객체·형상·저장 상태를 �
 3. **하면 안 되는 일:** 원본 MIT 고지나 적용되는 Apache/NOTICE 고지를 제거하지 마세요. 이 저장소의 라이선스로 Rhino 실행 파일·사용권 키·McNeel 문서, 타인의 상표·이미지, 고객 자료를 배포할 수 있다고 주장하지 마세요. SoDam-RhinoGo는 McNeel의 공식 제품이나 보증이 아닙니다. 비공개 자료·개인정보·API 키를 공개 예제에 넣지 마세요.
 4. **별도 프로그램과 의존성:** Rhino 7의 설치·사용·동시 접속·사용권 유형은 [Rhino 7 EULA](https://www.rhino3d.com/7/eula/)와 본인 계약에 따릅니다. 이 프로젝트는 공개 API를 사용하며 Rhino 비공개 바이너리의 역컴파일 권한을 주지 않습니다. `requirements.txt`의 직접 의존성은 `rhino3dm>=8.35,<9` 하나이고, 이 PC에 설치된 `8.35.0`의 메타데이터 및 포함 라이선스는 MIT입니다. 패키지 바이너리를 함께 배포한다면 정확한 배포 버전의 고지를 다시 확인하세요. Codex 계정·외부 API/SDK·서비스 요금제와 약관은 각각 별개입니다.
 5. **새 자료와 AI 결과물:** 점검한 소스에는 묶음 이미지·아이콘·폰트·영상·음원·외부 3D 모델이 없었습니다. 나중에 추가하는 모델·텍스처·템플릿·프롬프트·스크린샷·AI 생성 코드/문서/이미지/모델은 출처, 저작권, 상업적 허락, 표시 의무, 유사 저작물 침해 가능성을 최종 사용 전에 개별 확인하세요. `work/` 생성물과 고객 입력은 이번 소스 조사에서 제외했습니다.
-6. **공개·납품 전 확인:** 원본 MIT 고지와 사용자 지정 Apache 2.0 표기를 파일에서 확인했지만, Rhino 7 수정 코드의 모든 기여자 권리·고객 계약·입력 자료·생성 결과물 권리는 파일만으로 확정할 수 없습니다. 현재 GitHub 업로드는 **비공개 저장소**를 대상으로 합니다. 공개 전환·판매·고객 납품 전에는 권리 사슬과 Rhino 사용권 유형을 확인하고 **법무/전문가 검토 필요** 항목을 해결하세요. 모델 검사 통과는 건축 인허가·구조 안전·시공 승인이 아닙니다.
+6. **공개·납품 전 확인:** 원본 MIT 고지와 사용자 지정 Apache 2.0 표기를 파일에서 확인했지만, Rhino 7 수정 코드의 모든 기여자 권리·고객 계약·입력 자료·생성 결과물 권리는 파일만으로 확정할 수 없습니다. 이 저장소는 GitHub **공개 저장소**로 게시되며, 공개 게시는 SoDam AI Studio의 결정입니다. 판매·고객 납품 전에는 권리 사슬과 Rhino 사용권 유형을 확인하고 **법무/전문가 검토 필요** 항목을 해결하세요. 모델 검사 통과는 건축 인허가·구조 안전·시공 승인이 아닙니다.
 7. **보증과 책임:** Apache 2.0 및 원본 MIT의 보증 배제·책임 제한은 각각 해당 본문을 따릅니다. **참고용·법적 효력 보장 안 함, 사용자 책임·변호사 확인 권장.**
 
 <a id="evidence"></a>

@@ -42,13 +42,23 @@ SoDam-RhinoGo-Codex is the Rhino 7 project and repository name. Its skill plugin
 1. **Windows PC and Rhino 7:** The full example expects `C:\Program Files\Rhino 7\System\Rhino.exe`. Find the installer under **Legacy Downloads → Rhino 7** on [McNeel's official download page](https://www.rhino3d.com/en/download/), then activate it using your own Rhino license. If installed elsewhere, the current launcher fails before starting. You do not need the Rhino application for the small offline example.
 2. **Python 3.12 (64-bit recommended):** Get a 3.12-series installer from the [official Python Windows downloads](https://www.python.org/downloads/windows/). After installation, check `py -3.12 --version` in PowerShell. This computer was tested with 3.12.9. Scripts inside Rhino use Rhino 7's IronPython; Python 3.12 is used for installation and saved-file audits.
 3. **Codex desktop or CLI:** Follow the [Codex app guide](https://learn.chatgpt.com/docs/app) and [Codex CLI guide](https://learn.chatgpt.com/docs/codex/cli) to install and sign in. `codex --version` must work for the marketplace commands below. You can still run the manual PowerShell commands without Codex.
-4. **This project folder:** The current implementation is at `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex`. On another PC, copy the **entire modified project folder** from a safe backup. The private repository is https://github.com/sodam-ai/SoDam-RhinoGo-Codex; only authorized users can download it. There is no public download address. The [original GitHub repository](https://github.com/leoyang1984/rhino-architectural-modeling) is a Rhino 8 reference; downloading only that repository does not install this Rhino 7 plugin.
+4. **This project folder:** The current implementation is at `D:\AI_Dev_Work\2026y\26y_09m_29d_SoDam-RhinoGo-Codex`. On another PC, get the **entire modified project** from the public repository https://github.com/sodam-ai/SoDam-RhinoGo-Codex. Use either method: (a) install [Git for Windows](https://git-scm.com/download/win) and run `git clone` from the next section, or (b) without Git, use **Code → Download ZIP** on the GitHub page and unzip it. There is no separate Release or installer yet. The [original GitHub repository](https://github.com/leoyang1984/rhino-architectural-modeling) is a Rhino 8 reference; downloading only that repository does not install this Rhino 7 plugin.
 5. **Internet on first installation:** `pip` needs it to download `rhino3dm>=8.35,<9`. If it is already installed in this computer's `.venv`, you do not need to download it again. Rhino and Codex sign-in and license communication follow each product's settings and terms.
 
 <a id="installation"></a>
 ## 3. Obtaining and installing the project
 
-**Important:** `upstream-source/` is an unchanged reference clone of the original. The top-level folder is the modified Rhino 7 project. Do not merge the two or remove the top-level folder when cleaning up an old original installation. Save working files under `work/` with new names.
+**Important:** `upstream-source/` is an unchanged reference clone of the original. The top-level folder is the modified Rhino 7 project. Do not merge the two or remove the top-level folder when cleaning up an old original installation. Save working files under `work/` with new names. The public repository does not include `upstream-source/` (it is Git-ignored). You can browse the original at the link above.
+
+**Getting the project (new PC):** In PowerShell, go to the folder where you want it and download it. If you used the ZIP, skip this step and go to the unzipped folder.
+
+```powershell
+Set-Location 'D:\AI_Dev_Work'
+git clone https://github.com/sodam-ai/SoDam-RhinoGo-Codex.git
+Set-Location '.\SoDam-RhinoGo-Codex'
+```
+
+The remaining `Set-Location` examples in this guide use this computer's path. **On another PC, replace it with the path of the folder you downloaded** before running them.
 
 Open PowerShell and run the following **one line at a time**. If already installed, check `codex plugin list` first and skip duplicate installation commands.
 
@@ -146,11 +156,11 @@ $offline = ".\work\offline-$(Get-Date -Format yyyyMMdd-HHmmss)"
 
 There is no separate `package.json`, web build, or database migration in this project's runtime path.
 
-### Environment variables, build, and private repository use
+### Environment variables, build, and repository use
 
 Ordinary users do not need a `.env` file or API key. The launcher temporarily sets `RHINO7_OUTPUT_3DM` (new model path) and `RHINO7_PARAMS_JSON` (validated input JSON path), then restores their prior values. `RHINO7_IDEMPOTENCE_REPORT` is a developer path for the repeat-build test report. Do not put secrets or customer material in environment variables, JSON, or `work/` outputs.
 
-There is no separate compile, web build, or database migration step. Installing the Python environment and running the tests above prepares the runtime. **Storing code in a private GitHub repository is not publishing a public plugin.** On another PC, a person with access may obtain the private repository, install Rhino 7, Python, and Codex separately, then repeat the local marketplace registration and `.venv` installation here. Git excludes `.venv/`, `work/`, models, and reports; back those up separately. No Release or public distribution package exists yet.
+There is no separate compile, web build, or database migration step. Installing the Python environment and running the tests above prepares the runtime. **Publishing code in a public GitHub repository is not the same as distribution through an official Codex marketplace.** On another PC, obtain the public repository, install Rhino 7, Python, and Codex separately, then repeat the local marketplace registration and `.venv` installation here. Git excludes `.venv/`, `work/`, models, and reports; back those up separately. No Release or public distribution package exists yet.
 
 <a id="files"></a>
 ## 6. File locations and checking results
@@ -200,13 +210,14 @@ The default full model is a pavilion measured in mm. Frames, columns, beams, raf
 - Codex prompts and file access, Rhino license checks, and Python package downloads follow **the settings and terms of Codex, McNeel, and the package provider** respectively. Do not assume the whole process is always offline.
 - The plugin can request local file reads and model writes. Before installation, check that `source.path` in `.agents/plugins/marketplace.json` is `./plugins/sodam-rhinogo`; run it only from a project you trust.
 - Do not put passwords, tokens, or private keys in model names, parameter JSON, Codex prompts, reports, or README files. `.env` and `work/` are Git-ignored, but check actual files and Git changes again before sharing.
+- **Public repository caution:** Anyone can view, copy, and cache this repository. Before `git add`, check `git status` and `git diff --staged` for `.env` files, models (`.3dm`), reports, personal paths, and customer material. If a secret was ever pushed, a deletion commit does not remove it; revoke and reissue that key immediately.
 - Files are not automatically encrypted. Back up important models to a separate location. The launcher refuses to overwrite existing models and reports, but that does not replace a backup.
 - A previous check scanned 65 source files and 103 work reports for representative secret patterns and found no matches. This is not proof that every possible secret is absent.
 
 <a id="updates"></a>
 ## 9. Update summary
 
-<details><summary>Expand the Rhino 7 rebuild changes</summary><ul><li>Preserved the Rhino 8-oriented original under a separate <code>upstream-source/</code> reference and built the Rhino 7 version at the project root.</li><li>Configured a local Codex marketplace and the <code>sodam-rhinogo@sodam-rhinogo</code> skill plugin.</li><li>Added the full 67-object Rhino 7 example, a 41-object offline example, and independent live-document and saved-file audits.</li><li>Added parameter and object-count limits, overwrite prevention, variant comparison, repeat-build checks, and 14 unit tests.</li><li>The currently installed version reads <code>0.1.0+codex.20260927110134</code>. Recheck the installed version and test results after updating source code.</li></ul></details>
+<details><summary>Expand the Rhino 7 rebuild changes</summary><ul><li>Preserved the Rhino 8-oriented original under a separate <code>upstream-source/</code> reference and built the Rhino 7 version at the project root.</li><li>Configured a local Codex marketplace and the <code>sodam-rhinogo@sodam-rhinogo</code> skill plugin.</li><li>Added the full 67-object Rhino 7 example, a 41-object offline example, and independent live-document and saved-file audits.</li><li>Added parameter and object-count limits, overwrite prevention, variant comparison, repeat-build checks, and 14 unit tests.</li><li>For the public GitHub release, added download instructions (<code>git clone</code> and ZIP download) and public-repository security cautions.</li><li>The currently installed version reads <code>0.1.0+codex.20260927110134</code>. Recheck the installed version and test results after updating source code.</li></ul></details>
 
 <a id="troubleshooting"></a>
 ## 10. Troubleshooting
@@ -264,7 +275,7 @@ A. No. The audit checks conceptual model objects, geometry, and saving. Structur
 3. **Do not:** Do not remove the upstream MIT notice or applicable Apache/NOTICE notices. Do not claim this repository's licenses permit redistribution of Rhino executables, license keys, McNeel documentation, third-party marks or images, or customer materials. SoDam-RhinoGo is not an official McNeel product or endorsement. Do not put private data, personal information, or API keys in public examples.
 4. **Separate software and dependencies:** Installing and using Rhino 7, concurrent sessions, and license type follow the [Rhino 7 EULA](https://www.rhino3d.com/7/eula/) and your own agreement. This project uses public APIs and grants no right to decompile proprietary Rhino binaries. The only direct `requirements.txt` dependency is `rhino3dm>=8.35,<9`; installed `8.35.0` metadata and included license on this PC say MIT. Recheck notices for the exact version if bundling package binaries. Codex accounts, external APIs/SDKs, service plans, and terms are separate.
 5. **New materials and AI outputs:** No bundled image, icon, font, video, audio, or third-party 3D model was found in the reviewed source. For any later model, texture, template, prompt, screenshot, or AI-generated code/document/image/model, check origin, copyright, commercial permission, attribution, and possible similarity to protected works before final use. Generated `work/` files and customer inputs were outside this source review.
-6. **Before publication or delivery:** The upstream MIT notice and user-specified Apache 2.0 designation were verified in files, but those files alone cannot establish rights of every contributor to the Rhino 7 code or rights under customer contracts, input assets, and generated outputs. This GitHub upload targets a **private repository**. Before public release, sale, or customer delivery, verify the chain of rights and Rhino license type and resolve matters needing **legal or specialist review**. A passing model audit is not a building permit, structural safety finding, or construction approval.
+6. **Before publication or delivery:** The upstream MIT notice and user-specified Apache 2.0 designation were verified in files, but those files alone cannot establish rights of every contributor to the Rhino 7 code or rights under customer contracts, input assets, and generated outputs. This repository is published as a **public GitHub repository**, and the public release is a decision of SoDam AI Studio. Before sale or customer delivery, verify the chain of rights and Rhino license type and resolve matters needing **legal or specialist review**. A passing model audit is not a building permit, structural safety finding, or construction approval.
 7. **Warranty and liability:** The disclaimers and liability limits in Apache 2.0 and upstream MIT each apply to their respective material. **This is general reference information, not a legally binding conclusion; you are responsible for use and should consult a lawyer.**
 
 <a id="evidence"></a>
