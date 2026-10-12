@@ -11,3 +11,4 @@ upstream-source/
 *.build.json
 *.audit.json
 CHECKPOINT.md
+.omc/
